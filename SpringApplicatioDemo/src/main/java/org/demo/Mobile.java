@@ -13,8 +13,9 @@ public class Mobile {
          sim.calling();
          sim.data();
      }
+    // Without Configuration File
      public static void main(String[] args) {
-         ApplicationContext com = new AnnotationConfigApplicationContext(AppConfig.class);
+         ApplicationContext com = new AnnotationConfigApplicationContext("org.demo");
          Mobile mobile = com.getBean(Mobile.class);
          mobile.useSim();
      }

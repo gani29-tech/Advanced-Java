@@ -19,11 +19,23 @@ public class Bike {
         System.out.println("Bike cc : "+cc);
         System.out.println("Bike name : "+name);
         System.out.println("Engine Type: "+engine.getType());
-        Engine diesel = createDieselEngine();
-        System.out.println("Diesel Type: "+diesel.getType());
+        Engine dieselEngine1 = createDieselEngine();
+        Engine dieselEngine2 = createDieselEngine();
+        System.out.println("Diesel1 Engine Hashcode : "+dieselEngine1.hashCode());
+        System.out.println("Diesel2 Engine Hashcode : "+dieselEngine2.hashCode());
+        System.out.println(("Same Object of Diesel?"+(dieselEngine2==dieselEngine1)));
+        Engine petrolEngine1 = createPetrolEngine();
+        Engine petrolEngine2 = createPetrolEngine();
+        System.out.println("Petrol Engine Hashcode : "+petrolEngine1.hashCode());
+        System.out.println("Petrol Engine Hashcode : "+petrolEngine2.hashCode());
+        System.out.println("Same Object of Petrol?"+(petrolEngine1==petrolEngine2));
     }
     @Lookup("dieselEngine")
     protected Engine createDieselEngine(){
+        return null;
+    }
+    @Lookup("petrolEngine")
+    protected Engine createPetrolEngine(){
         return null;
     }
 }

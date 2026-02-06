@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component("dieselEngine")
 @Primary
-@Scope("prototype")
+@Scope("singleton") // By default singleton in spring
 public class DieselEngine implements Engine {
     @Override
     public String getType() {
