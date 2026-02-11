@@ -11,10 +11,12 @@ public class UserDao {
 
     public boolean saveUser(User user) {
         Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
             session.persist(user);
             tx.commit();
+            session.close();
             return true;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
@@ -23,14 +25,13 @@ public class UserDao {
         }
     }
 
-    public boolean login(String username, String password) {
+    public User login(String username, String password) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Long q= session.createQuery(
-                    "SELECT COUNT(id) from User where username = :username and password = :password", Long.class)
+            Query<User> q= session.createQuery(
+                    "from User where username = :username and password = :password", User.class)
             .setParameter("username", username)
-            .setParameter("password", password).uniqueResult();
-            System.out.println(q);
-            return q>0;
+            .setParameter("password", password);
+            return q.uniqueResult();
         }
     }
 

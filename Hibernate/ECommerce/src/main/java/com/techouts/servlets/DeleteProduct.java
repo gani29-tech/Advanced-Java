@@ -18,8 +18,13 @@ public class DeleteProduct extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         ProductDao productDao=new ProductDao();
-        productDao.deleteProduct(req.getParameter("name"));
-        req.setAttribute("message","Product deleted successfully");
-        res.sendRedirect("home.jsp");
+        int rows = productDao.deleteProduct(req.getParameter("name"));
+        if(rows>0){
+            req.setAttribute("message"," Product deleted successfully");
+        }
+        else{
+            req.setAttribute("error","Product doesn't exist");
+        }
+        req.getRequestDispatcher("/home").forward(req,res);
     }
 }

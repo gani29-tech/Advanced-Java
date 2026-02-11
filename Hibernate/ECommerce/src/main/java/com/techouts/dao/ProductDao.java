@@ -31,46 +31,50 @@ public class ProductDao {
         }
     }
 
-    public List<Product> getAllProducts() {
+    public static List<Product> getAllProducts() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Product> query = session.createQuery("from Product", Product.class);
             return query.list();
         }
     }
 
-    public List<Product> getProductsByCategory(String category) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Product> query = session.createQuery(
-                "from Product where category = :cat", Product.class);
-            query.setParameter("cat", category);
-            return query.list();
-        }
-    }
-
-    public void updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        boolean flag = false;
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            session.update(product);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteProduct(String productName) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            Product product = session.get(Product.class, productName);
-            if (product != null) {
-                session.delete(product);
+            Product existingProduct = session.createQuery("from Product where name=:name",Product.class).setParameter("name", product.getName()).uniqueResult();
+            if(existingProduct != null){
+                existingProduct.setName(product.getName());
+                existingProduct.setPrice(product.getPrice());
+                existingProduct.setDescription(product.getDescription());
+                existingProduct.setImageUrl(product.getImageUrl());
+                flag = true;
             }
             tx.commit();
+            session.close();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
         }
+        return flag;
+    }
+
+    public int deleteProduct(String productName) {
+        Transaction tx = null;
+        int rows = 0;
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            rows = session.createQuery("delete from Product where name=:name").setParameter("name", productName).executeUpdate();
+            tx.commit();
+            session.close();
+
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        }
+        return rows;
     }
 }

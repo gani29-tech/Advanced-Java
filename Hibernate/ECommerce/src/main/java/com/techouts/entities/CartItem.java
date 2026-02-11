@@ -1,26 +1,49 @@
 package com.techouts.entities;
 
-import java.io.Serializable;
+import javax.persistence.*;
 
-public class CartItem implements Serializable {
-
+@Entity
+@Table(name="cartItem")
+public class CartItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cartItem_id")
+    private int id;
+    @ManyToOne
+    @JoinColumn(name = "myCart_id")
+    private MyCart myCart;
+    @ManyToOne
     private Product product;
     private int quantity;
-
-    public CartItem() {}
-
-    public CartItem(Product product, int quantity) {
-        this.product = product;
-        this.quantity = quantity;
+    public int getId() {
+        return id;
     }
 
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    public MyCart getMyCart() {
+        return myCart;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setMyCart(MyCart myCart) {
+        this.myCart = myCart;
+    }
 
-    public double getTotalPrice() {
-        return product.getPrice() * quantity;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

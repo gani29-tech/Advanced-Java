@@ -21,9 +21,10 @@
         <property name="hibernate.show_sql">true</property>
 
         <mapping class="com.techouts.entities.User"/>
-        <mapping class="com.techouts.entities.CartItem"/>
+        <mapping class="com.techouts.entities.MyCart"/>
         <mapping class="com.techouts.entities.Product"/>
         <mapping class="com.techouts.entities.Order"/>
         <mapping class="com.techouts.entities.OrderItem"/>
+        <mapping class="com.techouts.entities.CartItem"/>
     </session-factory>
 </hibernate-configuration>

@@ -15,18 +15,19 @@
 <tr>
     <td>${c.product.name}</td>
     <td>${c.quantity}</td>
-    <td>₹${c.price}</td>
+    <td>₹${c.product.price}</td>
 </tr>
+<a href="${pageContext.request.contextPath}/removecart?id=${c.id}">Remove From Cart</a>
 </c:forEach>
 </table>
 
 <h3>Total: ₹${total}</h3>
 
-<a href="checkout.jsp">Checkout</a>
+<a href="cart/checkout.jsp">Checkout</a>
  </c:if>
   <c:if test="${empty cartItems}">
   Cart is Empty!!!!
-  <a href="../home.jsp">Shop now</a>
+  <a href="${pageContext.request.contextPath}/home">Shop now</a>
   </c:if>
 </body>
 </html>

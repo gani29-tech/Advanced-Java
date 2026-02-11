@@ -22,8 +22,12 @@ public class UpdateProduct extends HttpServlet {
         product.setDescription(req.getParameter("description"));
         product.setImageUrl(req.getParameter("imageUrl"));
         ProductDao productDao = new ProductDao();
-        productDao.updateProduct(product);
-        req.setAttribute("message","Product updated successfully");
-        res.sendRedirect("home.jsp");
+        if(productDao.updateProduct(product)) {
+            req.setAttribute("message", "Product updated successfully");
+        }
+        else{
+            req.setAttribute("error","Product doesn't exist");
+        }
+        req.getRequestDispatcher("/home").forward(req,res);
     }
 }

@@ -23,6 +23,6 @@ public class AddProduct extends HttpServlet {
         ProductDao productDao = new ProductDao();
         productDao.saveProduct(product);
         req.setAttribute("message","Product added successfully");
-        res.sendRedirect("home.jsp");
+        req.getRequestDispatcher("/home").forward(req,res);
     }
 }

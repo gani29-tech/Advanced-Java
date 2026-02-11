@@ -9,9 +9,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(unique = true, nullable = false)
     private String username;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private MyCart myCart;
+
+    public MyCart getMyCart() {
+        return myCart;
+    }
+
+    public void setMyCart(MyCart myCart) {
+        this.myCart = myCart;
+    }
 
     private String name;
 

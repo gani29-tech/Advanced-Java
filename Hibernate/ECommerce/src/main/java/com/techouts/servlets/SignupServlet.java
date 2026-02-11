@@ -8,6 +8,7 @@ import javax.servlet.http.*;
 
 
 import com.techouts.dao.UserDao;
+import com.techouts.entities.MyCart;
 import com.techouts.entities.User;
 
 @WebServlet("/signup")
@@ -28,8 +29,10 @@ public class SignupServlet extends HttpServlet {
         }
         user.setPassword(req.getParameter("password"));
         user.setPhoneNumber(Long.parseLong(req.getParameter("phonenumber")));
-
+        MyCart  myCart = new MyCart();
+        myCart.setUser(user);
         if(userDao.saveUser(user)) {
+            req.getSession().setAttribute("myCart", myCart);
         	res.sendRedirect("login.jsp");
         }
         else {

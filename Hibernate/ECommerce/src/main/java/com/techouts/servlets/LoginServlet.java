@@ -6,6 +6,8 @@ import javax.servlet.http.*;
 import java.io.IOException;
 
 import com.techouts.dao.UserDao;
+import com.techouts.entities.MyCart;
+import com.techouts.entities.User;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -17,10 +19,9 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDao userDao = new UserDao();
-        boolean user = userDao.login(username, password);
-        if (user) {
+        if (userDao.login(username, password)!=null) {
             req.getSession().setAttribute("user", username);
-            res.sendRedirect("home.jsp");
+            req.getRequestDispatcher("/home").forward(req, res);
         } else {
             req.setAttribute("error", "Invalid credentials");
             req.getRequestDispatcher("login.jsp").forward(req, res);

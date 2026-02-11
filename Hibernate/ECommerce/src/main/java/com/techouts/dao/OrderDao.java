@@ -10,11 +10,12 @@ public class OrderDao {
 
     public static boolean saveOrder(Order order) {
         Transaction tx = null;
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
             session.persist(order);
             tx.commit();
+            session.close();
             return true;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
