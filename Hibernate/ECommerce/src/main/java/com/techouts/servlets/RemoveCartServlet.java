@@ -12,18 +12,21 @@ import java.io.IOException;
 
 @WebServlet("/removecart")
 public class RemoveCartServlet extends HttpServlet {
-
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         if(MyCartDao.removeCartItem(id)){
-            req.setAttribute("message","Product Removed from cart");
-            req.getRequestDispatcher("/cart.jsp").forward(req, res);
+            req.getSession().setAttribute("message","Product has been removed from cart");
+            res.sendRedirect(req.getContextPath()+"/displaycart");
         }
         else{
             req.setAttribute("message","Product not removed from cart");
-            req.getRequestDispatcher("home.jsp").forward(req, res);
+            req.getRequestDispatcher("/home").forward(req, res);
         }
     }
 }

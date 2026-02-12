@@ -27,12 +27,19 @@ public class SignupServlet extends HttpServlet {
             req.setAttribute("error", "Email already exists!");
             req.getRequestDispatcher("/signup.jsp").forward(req, res);
         }
+        if(userDao.usernameExists(user.getUsername())){
+            req.setAttribute("error", "Username already exists!");
+            req.getRequestDispatcher("/signup.jsp").forward(req, res);
+        }
         user.setPassword(req.getParameter("password"));
         user.setPhoneNumber(Long.parseLong(req.getParameter("phonenumber")));
+        if(userDao.phoneNumberExists(user.getPhoneNumber())){
+            req.setAttribute("error", "Phone Number already exists!");
+            req.getRequestDispatcher("/signup.jsp").forward(req, res);
+        }
         MyCart  myCart = new MyCart();
-        myCart.setUser(user);
+        user.setMyCart(myCart);
         if(userDao.saveUser(user)) {
-            req.getSession().setAttribute("myCart", myCart);
         	res.sendRedirect("login.jsp");
         }
         else {

@@ -57,13 +57,12 @@
     <c:forEach items="${orders}" var="o">
         <div class="order-card">
             <p><strong>Order Status:</strong> ${o.status}</p>
-            <p><strong>Quantity:</strong> ${o.quantity}</p>
-            <p><strong>Total Price:</strong> $${o.totalPrice}</p>
+            <p><strong>Address:</strong> ${o.address}</p>
+            <p><strong>Total Price:</strong> $${o.totalAmount}</p>
             <p><strong>Date:</strong> ${o.orderDate}</p>
-
+            <p><strong>Payment Type:</strong> ${o.paymentType}</p>
             <div class="items-container">
                 <c:forEach items="${o.items}" var="i">
-                    Quantity:<p>${i.quantity}</p>
                     <div class="product-card">
                         <img src="${i.product.imageUrl}" alt="${i.product.name}">
                         <p><strong>${i.product.name}</strong></p>
@@ -72,10 +71,13 @@
                     </div>
                 </c:forEach>
             </div>
-
-            <a href="order?id=${o.id}">View Details</a>
         </div>
     </c:forEach>
+
+    <c:if test="${empty orders}">
+        <p>Orders are empty</p>
+        <a href="${pageContext.request.contextPath}/home">Shop now</a>
+    </c:if>
 </div>
 </body>
 </html>

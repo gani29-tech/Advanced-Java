@@ -13,6 +13,7 @@ import com.techouts.util.HibernateUtil;
 
 public class ProductDao {
 
+
     public void saveProduct(Product product) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -24,8 +25,14 @@ public class ProductDao {
             e.printStackTrace();
         }
     }
-
-    public Product getProductById(int id) {
+    public static boolean getProductByName(String productName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Product product = session.createQuery("from Product where name = :name", Product.class)
+                    .setParameter("name", productName).uniqueResult();
+            return product != null;
+        }
+    }
+    public static Product getProductById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Product.class, id);
         }

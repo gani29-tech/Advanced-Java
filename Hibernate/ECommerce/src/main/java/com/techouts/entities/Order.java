@@ -1,6 +1,7 @@
 package com.techouts.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,17 @@ public class Order {
     private double totalAmount;
     private String paymentType;
     private String status;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<CartItem> items = new ArrayList<>();
+
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -77,13 +87,5 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<OrderItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 }

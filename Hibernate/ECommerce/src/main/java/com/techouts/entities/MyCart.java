@@ -1,7 +1,10 @@
 package com.techouts.entities;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,9 +15,19 @@ public class MyCart implements Serializable {
     @Column(name = "myCart_id")
     private int id;
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "myCart",cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "myCart",cascade = CascadeType.ALL,fetch =  FetchType.EAGER)
+    private List<CartItem> cartItems = new ArrayList<>();
+    private double totalPrice;
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     public User getUser() {
         return user;

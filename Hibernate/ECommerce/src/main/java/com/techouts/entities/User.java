@@ -20,6 +20,7 @@ public class User {
 
     public void setMyCart(MyCart myCart) {
         this.myCart = myCart;
+        myCart.setUser(this);
     }
 
     private String name;

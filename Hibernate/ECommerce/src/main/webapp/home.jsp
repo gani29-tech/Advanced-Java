@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="java.util.*, com.techouts.entities.Product" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -36,17 +35,10 @@
 <body>
 
 <%
-    String user = (String) request.getSession().getAttribute("user");
+    String user = (String) request.getSession().getAttribute("username");
 %>
 
 <p>Welcome, <%= user %>!</p>
-
-<h2>Products</h2>
-<c:if test="${empty products}">
-    <p>Products are Empty</p>
-    <a href="products/addProduct.jsp">Add product?</a>
-</c:if>
-
 <div class="products-container">
     <c:forEach items="${products}" var="p">
         <div class="product-card">
@@ -56,18 +48,18 @@
             <a href="product?id=${p.id}">About product</a>
         </div>
     </c:forEach>
-</div><br><br>
-
+</div>
+<c:if test="${empty products}">
+    <p style="color:red">Products are empty</p>
+</c:if><br>
 <c:if test="${not empty message}">
     <p style="color:green">${message}</p>
 </c:if><br>
-
 <c:if test="${not empty error}">
     <p style="color:red">${error}</p>
 </c:if><br>
-
-<a href="cart/cart.jsp">View Cart</a><br><br>
-<a href="orders/orders.jsp">Orders</a><br><br>
+<a href="${pageContext.request.contextPath}/displaycart">View Cart</a><br><br>
+<a href="${pageContext.request.contextPath}/orders">Orders</a><br><br>
 
 <% if ("Gani4240".equals(user)) { %>
     <a href="products/addProduct.jsp">Add Product</a><br>

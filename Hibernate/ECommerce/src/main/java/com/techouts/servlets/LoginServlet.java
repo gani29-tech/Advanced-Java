@@ -19,8 +19,11 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserDao userDao = new UserDao();
-        if (userDao.login(username, password)!=null) {
-            req.getSession().setAttribute("user", username);
+        User user = userDao.login(username, password);
+
+        if (user!=null) {
+            req.getSession().setAttribute("username", username);
+            req.getSession().setAttribute("user",user);
             req.getRequestDispatcher("/home").forward(req, res);
         } else {
             req.setAttribute("error", "Invalid credentials");

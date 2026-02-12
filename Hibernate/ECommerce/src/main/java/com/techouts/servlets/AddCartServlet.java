@@ -1,17 +1,13 @@
 package com.techouts.servlets;
 
 import com.techouts.dao.MyCartDao;
-import com.techouts.dao.ProductDao;
-import com.techouts.entities.CartItem;
 import com.techouts.entities.MyCart;
-import com.techouts.entities.Product;
+import com.techouts.entities.User;
 
-import javax.servlet.*;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.ArrayList;
-
 
 @WebServlet("/addcart")
 public class AddCartServlet extends HttpServlet {
@@ -19,25 +15,23 @@ public class AddCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        MyCart myCart = (MyCart) req.getSession().getAttribute("myCart");
-        CartItem cartItem = new CartItem();
-        cartItem.setQuantity(Integer.parseInt(req.getParameter("quantity")));
-        ProductDao productDao = new ProductDao();
-        Product product = productDao.getProductById(Integer.parseInt(req.getParameter("productId")));
-        cartItem.setProduct(product);
-        if (myCart.getCartItems() == null) {
-            myCart.setCartItems(new ArrayList<>());
+
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            res.sendRedirect("login.jsp");
+            return;
         }
-        myCart.getCartItems().add(cartItem);
-        cartItem.setMyCart(myCart);
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        int quantity = Integer.parseInt(req.getParameter("quantity"));
         MyCartDao myCartDao = new MyCartDao();
-        if(myCartDao.addCartItem(myCart)){
-            req.setAttribute("message","Product added to cart");
-            req.setAttribute("cartItems",myCart.getCartItems());
-            req.getRequestDispatcher("cart/cart.jsp").forward(req, res);
-        }
-        else{
-            req.setAttribute("error","Product not added to cart");
+        boolean added = myCartDao.addCartItem(user.getId(), productId,quantity);
+        if (added) {
+            req.getSession().setAttribute("message","Product added to cart");
+            res.sendRedirect(req.getContextPath()+"/displaycart");
+        } else {
+            req.setAttribute("error", "Product not added to cart");
             req.getRequestDispatcher("/home").forward(req, res);
         }
     }

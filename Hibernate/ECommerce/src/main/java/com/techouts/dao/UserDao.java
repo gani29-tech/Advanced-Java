@@ -44,4 +44,21 @@ public class UserDao {
             return query.uniqueResult() > 0;
         }
     }
+    public boolean phoneNumberExists(long phoneNumber) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Long> query = session.createQuery(
+                    "select count(u.id) from User u where u.phoneNumber = :phone", Long.class);
+            query.setParameter("phone", phoneNumber);
+            return query.uniqueResult() > 0;
+        }
+    }
+
+    public boolean usernameExists(String username) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Long> query = session.createQuery(
+                    "select count(u.id) from User u where u.username = :username", Long.class);
+            query.setParameter("username", username);
+            return query.uniqueResult() > 0;
+        }
+    }
 }

@@ -21,8 +21,13 @@ public class AddProduct extends HttpServlet {
         product.setDescription(req.getParameter("description"));
         product.setImageUrl(req.getParameter("imageUrl"));
         ProductDao productDao = new ProductDao();
+        if(ProductDao.getProductByName(req.getParameter("name"))){
+            req.getSession().setAttribute("message", "Product already exists");
+            res.sendRedirect(req.getContextPath()+"/home");
+            return;
+        }
         productDao.saveProduct(product);
-        req.setAttribute("message","Product added successfully");
-        req.getRequestDispatcher("/home").forward(req,res);
+        req.getSession().setAttribute("message", "Product added successfully");
+        res.sendRedirect(req.getContextPath()+"/home");
     }
 }

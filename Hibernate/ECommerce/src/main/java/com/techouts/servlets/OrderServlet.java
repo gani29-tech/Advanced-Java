@@ -7,6 +7,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
+import com.techouts.dao.OrderDao;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -21,24 +22,13 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
-        HttpSession httpSession = req.getSession(false);
-        User user = (httpSession != null) ? (User) httpSession.getAttribute("user"): null;
-
+        HttpSession session = req.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user"): null;
         if (user == null) {
             res.sendRedirect("login.jsp");
             return;
         }
-
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        Query<Order> query = session.createQuery(
-                "from Order o where o.user.id = :uid order by o.orderDate desc",
-                Order.class);
-        query.setParameter("uid", user.getId());
-
-        List<Order> orders = query.list();
-        session.close();
-
+        List<Order> orders = OrderDao.getOrders(user.getId());
         req.setAttribute("orders", orders);
         req.getRequestDispatcher("order/orders.jsp").forward(req, res);
     }
