@@ -46,6 +46,7 @@
             <p><strong>${p.name}</strong></p>
             <p>Price: $${p.price}</p>
             <a href="product?id=${p.id}">About product</a>
+            <a href="${pageContext.request.contextPath}/orderitem?productId=${p.id}">Buy Now</a>
         </div>
     </c:forEach>
 </div>

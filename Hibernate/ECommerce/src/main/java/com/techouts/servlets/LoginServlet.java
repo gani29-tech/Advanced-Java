@@ -11,7 +11,10 @@ import com.techouts.entities.User;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,IOException {
+        doPost(req,res);
+    }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {

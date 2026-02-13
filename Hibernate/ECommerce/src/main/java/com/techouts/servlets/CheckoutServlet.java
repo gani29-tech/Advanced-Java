@@ -1,5 +1,6 @@
 package com.techouts.servlets;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -15,8 +16,7 @@ public class CheckoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-
+            throws IOException, ServletException {
         Order order = new Order();
         User user = (User)req.getSession().getAttribute("user");
         order.setUser(user);
@@ -31,7 +31,8 @@ public class CheckoutServlet extends HttpServlet {
             MyCartDao myCartDao = new MyCartDao();
             myCartDao.clearCart(user.getId());
             req.setAttribute("orders", order);
-            res.sendRedirect("order/success.jsp");
+            req.setAttribute("orderId", order.getId());
+            req.getRequestDispatcher("order/success.jsp").forward(req,res);
         } else {
             res.sendRedirect("order/failure.jsp");
         }

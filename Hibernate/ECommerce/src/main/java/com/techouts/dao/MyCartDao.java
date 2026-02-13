@@ -20,7 +20,7 @@ public class MyCartDao {
             for(CartItem item:myCart.getCartItems()){
                 if(item.getProduct().getId()==productId){
                     item.setQuantity(item.getQuantity()+quantity);
-                    totalPrice = totalPrice + item.getProduct().getPrice();
+                    totalPrice = totalPrice + (item.getProduct().getPrice()*quantity);
                     myCart.setTotalPrice(totalPrice);
                     session.merge(item);
                     tx.commit();

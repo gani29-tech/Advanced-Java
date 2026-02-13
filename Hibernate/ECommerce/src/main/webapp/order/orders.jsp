@@ -53,9 +53,13 @@
 </head>
 <body>
 <h2>Orders</h2>
+<c:if test="${not empty orders}">
+            <a href="${pageContext.request.contextPath}/home">Home</a>
+        </c:if><br>
 <div class="orders-container">
     <c:forEach items="${orders}" var="o">
         <div class="order-card">
+        <p><strong>Order Id:</strong> ${o.id}</p>
             <p><strong>Order Status:</strong> ${o.status}</p>
             <p><strong>Address:</strong> ${o.address}</p>
             <p><strong>Total Price:</strong> $${o.totalAmount}</p>

@@ -17,7 +17,7 @@ public class OrderDao {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            session.merge(order);
+            session.persist(order);
             tx.commit();
             session.close();
             return true;

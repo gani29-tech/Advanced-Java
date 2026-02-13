@@ -27,7 +27,7 @@ public class OrderItemServlet extends HttpServlet {
         request.getRequestDispatcher("cart/orderitem.jsp").forward(request,response);
     }
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException,ServletException {
 
         Order order = new Order();
         User user = (User)req.getSession().getAttribute("user");
@@ -48,8 +48,9 @@ public class OrderItemServlet extends HttpServlet {
             req.removeAttribute("cart");
             MyCartDao myCartDao = new MyCartDao();
             myCartDao.clearCart(user.getId());
+            req.setAttribute("orderId", order.getId());
             req.setAttribute("orders", order);
-            res.sendRedirect("order/success.jsp");
+            req.getRequestDispatcher("order/success.jsp").forward(req,res);
         } else {
             res.sendRedirect("order/failure.jsp");
         }

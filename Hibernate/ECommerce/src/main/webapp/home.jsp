@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<a href="profile.jsp">Update Profile</a><br><br>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,6 +47,7 @@
             <p><strong>${p.name}</strong></p>
             <p>Price: $${p.price}</p>
             <a href="product?id=${p.id}">About product</a>
+            <a href="${pageContext.request.contextPath}/orderitem?productId=${p.id}">Buy Now</a>
         </div>
     </c:forEach>
 </div>

@@ -18,7 +18,7 @@ public class Order {
     private double totalAmount;
     private String paymentType;
     private String status;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<>();
 
     public List<CartItem> getItems() {
