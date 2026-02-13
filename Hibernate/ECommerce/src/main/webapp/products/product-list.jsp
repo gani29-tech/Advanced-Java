@@ -46,7 +46,12 @@
             <p><strong>${p.name}</strong></p>
             <p>Price: $${p.price}</p>
             <a href="product?id=${p.id}">About product</a>
-            <a href="${pageContext.request.contextPath}/orderitem?productId=${p.id}">Buy Now</a>
+            <form action="${pageContext.request.contextPath}/addcart" method="post">
+                  <input type="hidden" name="productId" value="${p.id}">
+                  <input type="hidden" name="quantity" value="1"<br><br>
+                  <button type="submit">Add to Cart</button><br><br>
+                  <a href="${pageContext.request.contextPath}/orderitem?productId=${p.id}">Buy Now</a>
+            </form>
         </div>
     </c:forEach>
 </div>

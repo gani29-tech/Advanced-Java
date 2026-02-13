@@ -1,19 +1,15 @@
 package com.techouts.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
 import com.techouts.entities.Product;
 import com.techouts.util.HibernateUtil;
 
-
-
 public class ProductDao {
-
-
     public void saveProduct(Product product) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -25,6 +21,7 @@ public class ProductDao {
             e.printStackTrace();
         }
     }
+
     public static boolean getProductByName(String productName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Product product = session.createQuery("from Product where name = :name", Product.class)
@@ -32,11 +29,35 @@ public class ProductDao {
             return product != null;
         }
     }
+
     public static Product getProductById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Product.class, id);
         }
     }
+
+    public static List<Product> getProductsByCategory(String category) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            if (category.equals("All")) {
+                List<Product> products = session.createQuery("from Product").list();
+                return products;
+            } else {
+                return session.createQuery("from Product where category = :category", Product.class)
+                        .setParameter("category", category).list();
+            }
+        }
+    }
+
+    public static List<String> getAllCategories() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT DISTINCT p.category FROM Product p", String.class)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
 
     public static List<Product> getAllProducts() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -51,8 +72,8 @@ public class ProductDao {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            Product existingProduct = session.createQuery("from Product where name=:name",Product.class).setParameter("name", product.getName()).uniqueResult();
-            if(existingProduct != null){
+            Product existingProduct = session.createQuery("from Product where name=:name", Product.class).setParameter("name", product.getName()).uniqueResult();
+            if (existingProduct != null) {
                 existingProduct.setName(product.getName());
                 existingProduct.setPrice(product.getPrice());
                 existingProduct.setDescription(product.getDescription());

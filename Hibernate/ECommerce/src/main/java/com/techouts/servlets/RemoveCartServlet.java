@@ -25,7 +25,7 @@ public class RemoveCartServlet extends HttpServlet {
             res.sendRedirect(req.getContextPath()+"/displaycart");
         }
         else{
-            req.setAttribute("message","Product not removed from cart");
+            req.getSession().setAttribute("message","Product not removed from cart");
             req.getRequestDispatcher("/home").forward(req, res);
         }
     }

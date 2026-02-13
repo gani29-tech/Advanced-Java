@@ -27,7 +27,8 @@ public class OrderDao {
             return false;
         }
     }
-    public static List<Order> getOrders(int userId){
+
+    public static List<Order> getOrders(int userId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Order> query = session.createQuery("from Order o where o.user.id = :uid order by o.orderDate desc",
                     Order.class

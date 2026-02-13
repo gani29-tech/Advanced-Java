@@ -27,10 +27,10 @@ public class UserDao {
 
     public User login(String username, String password) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<User> q= session.createQuery(
-                    "from User where username = :username and password = :password", User.class)
-            .setParameter("username", username)
-            .setParameter("password", password);
+            Query<User> q = session.createQuery(
+                            "from User where username = :username and password = :password", User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password);
             return q.uniqueResult();
         }
     }
@@ -39,11 +39,12 @@ public class UserDao {
     public boolean emailExists(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Long> query = session.createQuery(
-                "select count(u.id) from User u where u.email = :email", Long.class);
+                    "select count(u.id) from User u where u.email = :email", Long.class);
             query.setParameter("email", email);
             return query.uniqueResult() > 0;
         }
     }
+
     public boolean phoneNumberExists(long phoneNumber) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Long> query = session.createQuery(

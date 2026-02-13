@@ -1,8 +1,6 @@
 package com.techouts.servlets;
 
-
 import com.techouts.dao.ProductDao;
-import com.techouts.entities.Product;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,14 +15,13 @@ public class DeleteProduct extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        ProductDao productDao=new ProductDao();
+        ProductDao productDao = new ProductDao();
         int rows = productDao.deleteProduct(req.getParameter("name"));
-        if(rows>0){
-            req.setAttribute("message"," Product deleted successfully");
+        if (rows > 0) {
+            req.getSession().setAttribute("message","Product Deleted Successfully");
+        } else {
+            req.setAttribute("error", "Product doesn't exist");
         }
-        else{
-            req.setAttribute("error","Product doesn't exist");
-        }
-        req.getRequestDispatcher("/home").forward(req,res);
+        req.getRequestDispatcher("/home").forward(req, res);
     }
 }

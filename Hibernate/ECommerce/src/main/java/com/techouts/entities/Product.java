@@ -13,6 +13,15 @@ public class Product {
     private double price;
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public int getId() {
         return id;

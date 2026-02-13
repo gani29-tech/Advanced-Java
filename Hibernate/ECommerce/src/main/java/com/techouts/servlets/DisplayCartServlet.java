@@ -15,13 +15,14 @@ import java.io.IOException;
 public class DisplayCartServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
-        if(user==null){
+        if (user == null) {
             response.sendRedirect("login.jsp");
         }
         MyCart myCart = MyCartDao.getCartByUser(user);

@@ -18,12 +18,11 @@ public class CheckoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws IOException, ServletException {
         Order order = new Order();
-        User user = (User)req.getSession().getAttribute("user");
+        User user = (User) req.getSession().getAttribute("user");
         order.setUser(user);
         order.setOrderDate(new Date());
         order.setPaymentType(req.getParameter("paymentType"));
         order.setStatus("Order Placed");
-        order.setItems((List<CartItem>) req.getSession().getAttribute("cartItemsList"));
         order.setAddress(req.getParameter("address"));
         order.setTotalAmount((Double) req.getSession().getAttribute("totalPrice"));
         if (OrderDao.saveOrder(order)) {
@@ -32,7 +31,7 @@ public class CheckoutServlet extends HttpServlet {
             myCartDao.clearCart(user.getId());
             req.setAttribute("orders", order);
             req.setAttribute("orderId", order.getId());
-            req.getRequestDispatcher("order/success.jsp").forward(req,res);
+            req.getRequestDispatcher("order/success.jsp").forward(req, res);
         } else {
             res.sendRedirect("order/failure.jsp");
         }

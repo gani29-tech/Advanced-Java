@@ -3,7 +3,7 @@ package com.techouts.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name="cartItem")
+@Table(name = "cartItem")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,7 @@ public class CartItem {
     }
 
     private int quantity;
+
     public int getId() {
         return id;
     }

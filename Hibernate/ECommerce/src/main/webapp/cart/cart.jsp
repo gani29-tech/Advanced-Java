@@ -7,12 +7,12 @@
 <c:set var="total" value="${sessionScope.totalPrice}" />
 <c:set var="message" value="${sessionScope.message}"/>
 <c:if test="${not empty message}">
-<p color="green">${message}</p>
+<p style="color:green">${message}</p>
 <c:remove var="message" scope="session"/>
 </c:if>
 <c:set var="error" value="${sessionScope.error}"/>
 <c:if test="${not empty error}">
-<p color="red">${error}</p>
+<p style="color:red">${error}</p>
 <c:remove var="error" scope="session"/>
 </c:if>
 <c:if test="${not empty cartItems}">

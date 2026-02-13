@@ -26,4 +26,8 @@ public class ProductDetailServlet extends HttpServlet {
 		req.setAttribute("product", product);
 		req.getRequestDispatcher("products/product-detail.jsp").forward(req, res);
 	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		doGet(req, res);
+	}
 }

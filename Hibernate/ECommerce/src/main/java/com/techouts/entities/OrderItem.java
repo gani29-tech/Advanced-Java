@@ -12,12 +12,15 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
     private double orderPrice;
+
     public double getOrderPrice() {
         return orderPrice;
     }
+
     public void setOrderPrice(double orderPrice) {
         this.orderPrice = orderPrice;
     }
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

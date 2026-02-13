@@ -6,15 +6,15 @@ import javax.servlet.http.*;
 import java.io.IOException;
 
 import com.techouts.dao.UserDao;
-import com.techouts.entities.MyCart;
 import com.techouts.entities.User;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,IOException {
-        doPost(req,res);
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        doPost(req, res);
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -24,9 +24,9 @@ public class LoginServlet extends HttpServlet {
         UserDao userDao = new UserDao();
         User user = userDao.login(username, password);
 
-        if (user!=null) {
+        if (user != null) {
             req.getSession().setAttribute("username", username);
-            req.getSession().setAttribute("user",user);
+            req.getSession().setAttribute("user", user);
             req.getRequestDispatcher("/home").forward(req, res);
         } else {
             req.setAttribute("error", "Invalid credentials");
