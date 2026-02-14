@@ -21,8 +21,7 @@ public class LoginServlet extends HttpServlet {
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        UserDao userDao = new UserDao();
-        User user = userDao.login(username, password);
+        User user = UserDao.login(username, password);
 
         if (user != null) {
             req.getSession().setAttribute("username", username);

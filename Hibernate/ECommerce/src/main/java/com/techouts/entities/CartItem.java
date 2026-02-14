@@ -14,19 +14,6 @@ public class CartItem {
     private MyCart myCart;
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id")
-    private Order order;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-        order.getItems().add(this);
-    }
-
     private int quantity;
 
     public int getId() {

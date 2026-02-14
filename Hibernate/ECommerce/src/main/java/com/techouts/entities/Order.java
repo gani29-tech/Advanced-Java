@@ -18,20 +18,20 @@ public class Order {
     private double totalAmount;
     private String paymentType;
     private String status;
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-    private List<CartItem> items = new ArrayList<>();
-
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderItem> items = new ArrayList<>();
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
 
     public String getPaymentType() {
         return paymentType;

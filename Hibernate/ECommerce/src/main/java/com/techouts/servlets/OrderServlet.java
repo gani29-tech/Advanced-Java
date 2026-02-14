@@ -3,17 +3,12 @@ package com.techouts.servlets;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-
 import java.io.IOException;
 import java.util.List;
 
 import com.techouts.dao.OrderDao;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-
 import com.techouts.entities.Order;
 import com.techouts.entities.User;
-import com.techouts.util.HibernateUtil;
 
 @WebServlet("/orders")
 public class OrderServlet extends HttpServlet {
@@ -23,7 +18,7 @@ public class OrderServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = req.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user"): null;
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
             res.sendRedirect("login.jsp");
             return;

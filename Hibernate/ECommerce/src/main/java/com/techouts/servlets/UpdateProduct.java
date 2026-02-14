@@ -16,18 +16,18 @@ public class UpdateProduct extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        Product product = new Product();
-        product.setName(req.getParameter("name"));
+        Product product = ProductDao.getProductByName(req.getParameter("name"));
+        if(product==null){
+            req.getSession().setAttribute("error", "Product doesn't exist");
+            req.getRequestDispatcher("/home").forward(req, res);
+        }
+        String name = req.getParameter("name");
+        product.setName(name);
         product.setPrice(Integer.parseInt(req.getParameter("price")));
         product.setDescription(req.getParameter("description"));
-        product.setImageUrl(req.getParameter("imageUrl"));
-        ProductDao productDao = new ProductDao();
-        if(productDao.updateProduct(product)) {
-            req.getSession().setAttribute("message", "Product updated successfully");
-        }
-        else{
-            req.setAttribute("error","Product doesn't exist");
-        }
-        req.getRequestDispatcher("/home").forward(req,res);
+        product.setImageUrl(ProductDao.getImageName(product.getId()));
+        ProductDao.updateProduct(product);
+        req.getSession().setAttribute("message", "Product updated successfully");
+        req.getRequestDispatcher("/home").forward(req, res);
     }
 }

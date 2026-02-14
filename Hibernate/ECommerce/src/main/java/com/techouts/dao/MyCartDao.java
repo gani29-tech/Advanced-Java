@@ -8,6 +8,8 @@ import com.techouts.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.Set;
+
 public class MyCartDao {
     public static boolean addCartItem(int userId, int productId, int quantity) {
         Transaction tx = null;
@@ -73,7 +75,7 @@ public class MyCartDao {
         }
     }
 
-    public static boolean clearCart(int userId) {
+    public static void clearCart(int userId) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -81,7 +83,7 @@ public class MyCartDao {
                     .setParameter("userId", userId)
                     .uniqueResult();
             if (myCart == null) {
-                return false;
+                return;
             }
             for (CartItem item : myCart.getCartItems()) {
                 session.delete(item);
@@ -90,11 +92,16 @@ public class MyCartDao {
             myCart.setTotalPrice(0);
             session.merge(myCart);
             tx.commit();
-            return true;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
-            return false;
+        }
+    }
+
+    public static Set<CartItem> getCartItems(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            MyCart myCart = session.get(MyCart.class, userId);
+            return myCart.getCartItems();
         }
     }
 

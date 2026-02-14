@@ -1,12 +1,14 @@
 package com.techouts.servlets;
 
 import com.techouts.dao.ProductDao;
+import com.techouts.entities.Product;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 @WebServlet("/deleteProduct")
@@ -15,12 +17,17 @@ public class DeleteProduct extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        ProductDao productDao = new ProductDao();
-        int rows = productDao.deleteProduct(req.getParameter("name"));
-        if (rows > 0) {
-            req.getSession().setAttribute("message","Product Deleted Successfully");
+        Product product = ProductDao.getProductByName(req.getParameter("name"));
+        if (ProductDao.deleteProduct(product)>0) {
+            req.getSession().setAttribute("message", "Product Deleted Successfully");
+            String fileName = product.getImageUrl();
+            if (fileName != null) {
+                String imagePath = getServletContext().getRealPath("") + "images" + File.separator + fileName;
+                File file = new File(imagePath);
+                if (file.exists()) file.delete();
+            }
         } else {
-            req.setAttribute("error", "Product doesn't exist");
+            req.getSession().setAttribute("error", "Product doesn't exist");
         }
         req.getRequestDispatcher("/home").forward(req, res);
     }

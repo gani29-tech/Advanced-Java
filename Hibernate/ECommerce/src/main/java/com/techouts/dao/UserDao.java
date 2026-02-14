@@ -9,7 +9,7 @@ import com.techouts.util.HibernateUtil;
 
 public class UserDao {
 
-    public boolean saveUser(User user) {
+    public static boolean saveUser(User user) {
         Transaction tx = null;
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
@@ -25,7 +25,7 @@ public class UserDao {
         }
     }
 
-    public User login(String username, String password) {
+    public static User login(String username, String password) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<User> q = session.createQuery(
                             "from User where username = :username and password = :password", User.class)
@@ -36,39 +36,46 @@ public class UserDao {
     }
 
 
-    public boolean emailExists(String email) {
+    public static Long emailExists(String email, int userId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Long> query = session.createQuery(
-                    "select count(u.id) from User u where u.email = :email", Long.class);
+                    "select count(u.id) from User u"
+                            + " where u.email = :email and u.id <> :uid", Long.class);
             query.setParameter("email", email);
-            return query.uniqueResult() > 0;
+            query.setParameter("uid", userId);
+            return query.uniqueResult();
         }
     }
 
-    public boolean phoneNumberExists(long phoneNumber) {
+    public static Long phoneNumberExists(long phoneNumber, int userId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Long> query = session.createQuery(
-                    "select count(u.id) from User u where u.phoneNumber = :phone", Long.class);
-            query.setParameter("phone", phoneNumber);
-            return query.uniqueResult() > 0;
+                    "select count(u.id) from User u"
+                            + " where u.phoneNumber = :phoneNumber and u.id <> :uid", Long.class);
+            query.setParameter("phoneNumber", phoneNumber);
+            query.setParameter("uid", userId);
+            return query.uniqueResult();
         }
     }
 
-    public boolean usernameExists(String username) {
+    public static Long usernameExists(String username, int userId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Long> query = session.createQuery(
-                    "select count(u.id) from User u where u.username = :username", Long.class);
+                    "select count(u.id) from User u"
+                            + " where u.username = :username and u.id <> :uid", Long.class);
             query.setParameter("username", username);
-            return query.uniqueResult() > 0;
+            query.setParameter("uid", userId);
+            return query.uniqueResult();
         }
     }
 
-    public boolean updateUser(User user) {
+
+    public static boolean updateUser(User user) {
         Transaction tx = null;
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            session.update(user);
+            session.merge(user);
             tx.commit();
             session.close();
             return true;

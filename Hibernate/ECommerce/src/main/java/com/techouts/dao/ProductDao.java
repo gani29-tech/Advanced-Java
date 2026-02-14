@@ -10,7 +10,7 @@ import com.techouts.entities.Product;
 import com.techouts.util.HibernateUtil;
 
 public class ProductDao {
-    public void saveProduct(Product product) {
+    public static void saveProduct(Product product) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -22,11 +22,10 @@ public class ProductDao {
         }
     }
 
-    public static boolean getProductByName(String productName) {
+    public static Product getProductByName(String productName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Product product = session.createQuery("from Product where name = :name", Product.class)
+            return session.createQuery("from Product where name = :name", Product.class)
                     .setParameter("name", productName).uniqueResult();
-            return product != null;
         }
     }
 
@@ -66,7 +65,7 @@ public class ProductDao {
         }
     }
 
-    public boolean updateProduct(Product product) {
+    public static boolean updateProduct(Product product) {
         Transaction tx = null;
         boolean flag = false;
         try {
@@ -89,20 +88,28 @@ public class ProductDao {
         return flag;
     }
 
-    public int deleteProduct(String productName) {
+    public static int deleteProduct(Product product) {
         Transaction tx = null;
         int rows = 0;
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
-            rows = session.createQuery("delete from Product where name=:name").setParameter("name", productName).executeUpdate();
+            session.createQuery("delete from CartItem where product_id=:id").setParameter("id", product.getId()).executeUpdate();
+            session.createQuery("delete from OrderItem where product_id=:id").setParameter("id", product.getId()).executeUpdate();
+            rows = session.createQuery("delete from Product where name=:name").setParameter("name", product.getName()).executeUpdate();
             tx.commit();
             session.close();
-
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
         }
         return rows;
+    }
+
+    public static String getImageName(int productId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Product product = session.get(Product.class, productId);
+            return product.getImageUrl();
+        }
     }
 }

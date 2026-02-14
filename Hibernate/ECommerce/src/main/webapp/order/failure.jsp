@@ -1,6 +1,6 @@
 <html>
 <body>
- 
+ <a href="${pageContext.request.contextPath}/home">Home</a><br>
 <h2 style="color:red">Order Failed </h2>
 <p>Please try again....</p>
  

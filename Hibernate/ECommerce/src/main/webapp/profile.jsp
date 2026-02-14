@@ -6,15 +6,14 @@
 <title>Update Profile</title>
 </head>
 <body>
-
+<a href="${pageContext.request.contextPath}/home">Home</a><br>
 <h2>Update Profile</h2>
-
-<form action="profile" method="post">
-    Name: <input type="text" name="name" required /><br><br>
-    username: <input type="text" name="username" required /><br><br>
-    Email: <input type="email" name="email" required /><br><br>
-    Password: <input type="password" name="password" required /><br><br>
-    Phone Number: <input type="tel" name="phonenumber" required /><br><br>
+<form action="updateprofile" method="post">
+<input type="hidden" name="userId" value ="${userId}"/>
+    Name: <input type="text" name="name" value ="${name}" required /><br><br>
+    username: <input type="text" name="username" value ="${userName}" required /><br><br>
+    Email: <input type="email" name="email" value ="${email}" required /><br><br>
+    Phone Number: <input type="tel" name="phoneNumber" value ="${phoneNumber}" required /><br><br>
     <input type="submit" value="Update" />
 </form>
 <br>

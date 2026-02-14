@@ -1,6 +1,7 @@
 package com.techouts.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -14,7 +15,6 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
     private String category;
-
     public String getCategory() {
         return category;
     }

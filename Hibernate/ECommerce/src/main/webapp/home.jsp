@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ page import="com.techouts.entities.User"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,15 +27,14 @@
 <body>
 
 <%
-    String user = (String) session.getAttribute("username");
+    User user = (User) session.getAttribute("user");
 %>
-
 <div class="header-links">
-    <a href="profile.jsp">Update Profile</a>
+    <a href="${pageContext.request.contextPath}/updateprofile">Update Profile</a>
     <a href="${pageContext.request.contextPath}/displaycart">View Cart</a>
     <a href="${pageContext.request.contextPath}/orders">Orders</a>
 
-    <% if ("Gani4240".equals(user)) { %>
+    <% if (1==user.getId()) { %>
         <a href="products/addProduct.jsp">Add Product</a>
         <a href="products/deleteProduct.jsp">Delete Product</a>
         <a href="products/updateProduct.jsp">Update Product</a>
@@ -44,7 +43,7 @@
     <a href="${pageContext.request.contextPath}/logout">Logout</a>
 </div>
 
-<h2>Welcome, <%= user %>!</h2>
+<h2>Welcome, <%= user.getName() %>!</h2>
 
 <!-- Category filter -->
 <form method="get" action="home">
@@ -58,13 +57,21 @@
         </select>
     </div>
 </form>
+<c:if test="${not empty sessionScope.message}">
+    <p class="message">${sessionScope.message}</p>
+    <c:remove var="message" scope="session"/>
+</c:if>
 
+<c:if test="${not empty sessionScope.error}">
+    <p class="error">${sessionScope.error}</p>
+    <c:remove var="error" scope="session"/>
+</c:if>
 <!-- Products -->
 <div class="products-container">
     <c:forEach items="${products}" var="p">
         <c:if test="${param.category == null || param.category == 'All' || param.category == p.category}">
             <div class="product-card">
-                <img src="${p.imageUrl}" alt="Image of ${p.name}">
+                <img src="${pageContext.request.contextPath}/images/${p.imageUrl}" alt="Image of ${p.name}">
                 <h3>${p.name}</h3>
                 <p>Category: ${p.category}</p>
                 <p>Price: <fmt:formatNumber value="${p.price}" type="currency"/></p>
@@ -87,16 +94,6 @@
     <p class="error">No products available.</p>
 </c:if>
 
-<!-- Display messages -->
-<c:if test="${not empty sessionScope.message}">
-    <p class="message">${sessionScope.message}</p>
-    <c:remove var="message" scope="session"/>
-</c:if>
-
-<c:if test="${not empty sessionScope.error}">
-    <p class="error">${sessionScope.error}</p>
-    <c:remove var="error" scope="session"/>
-</c:if>
 
 </body>
 </html>

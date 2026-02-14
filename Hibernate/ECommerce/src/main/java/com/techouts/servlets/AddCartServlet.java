@@ -4,11 +4,17 @@ import com.techouts.dao.MyCartDao;
 import com.techouts.entities.User;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/addcart")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
+)
 public class AddCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -23,8 +29,7 @@ public class AddCartServlet extends HttpServlet {
         }
         int productId = Integer.parseInt(req.getParameter("productId"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
-        MyCartDao myCartDao = new MyCartDao();
-        boolean added = myCartDao.addCartItem(user.getId(), productId, quantity);
+        boolean added = MyCartDao.addCartItem(user.getId(), productId, quantity);
         if (added) {
             req.getSession().setAttribute("message", "Product added to cart");
             res.sendRedirect(req.getContextPath() + "/home");

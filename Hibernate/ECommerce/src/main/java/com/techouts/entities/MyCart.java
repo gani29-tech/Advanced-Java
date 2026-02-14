@@ -2,8 +2,8 @@ package com.techouts.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "myCart")
@@ -16,7 +16,7 @@ public class MyCart implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "myCart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CartItem> cartItems = new ArrayList<>();
+    private Set<CartItem> cartItems = new HashSet<>();
     private double totalPrice;
 
     public double getTotalPrice() {
@@ -43,11 +43,11 @@ public class MyCart implements Serializable {
         this.id = id;
     }
 
-    public List<CartItem> getCartItems() {
+    public Set<CartItem> getCartItems() {
         return cartItems;
     }
 
-    public void setCartItems(List<CartItem> cartItems) {
+    public void setCartItems(Set<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
 }

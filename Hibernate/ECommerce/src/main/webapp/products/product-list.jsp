@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
+<a href="${pageContext.request.contextPath}/home">Home</a><br>
     <style>
         .products-container {
             display: flex;
@@ -42,7 +43,7 @@
 <div class="products-container">
     <c:forEach items="${products}" var="p">
         <div class="product-card">
-            <img src="${p.imageUrl}" alt="${p.name}">
+            <img src="${pageContext.request.contextPath}/images/${p.imageUrl}" alt="${p.name}">
             <p><strong>${p.name}</strong></p>
             <p>Price: $${p.price}</p>
             <a href="product?id=${p.id}">About product</a>

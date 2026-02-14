@@ -16,7 +16,7 @@
 <c:remove var="error" scope="session"/>
 </c:if>
 <c:if test="${not empty cartItems}">
-    <a href="${pageContext.request.contextPath}/products">Add Products to cart</a><br>
+    <a href="${pageContext.request.contextPath}/products">Add Products to cart</a><br><br>
     <table border="1">
         <tr>
             <th>Product</th>

@@ -1,4 +1,5 @@
 package com.techouts.servlets;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -14,14 +15,14 @@ import com.techouts.util.HibernateUtil;
 @WebServlet("/products")
 public class ProductListServlet extends HttpServlet {
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		List<Product> products = session.createQuery("from Product", Product.class).list();
-		session.close();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Product> products = session.createQuery("from Product", Product.class).list();
+        session.close();
 
-		req.setAttribute("products", products);
-		req.getRequestDispatcher("home.jsp").forward(req, res);
-	}
+        req.setAttribute("products", products);
+        req.getRequestDispatcher("home.jsp").forward(req, res);
+    }
 }

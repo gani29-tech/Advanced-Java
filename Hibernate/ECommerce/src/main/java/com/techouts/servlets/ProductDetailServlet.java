@@ -14,20 +14,21 @@ import com.techouts.util.HibernateUtil;
 @WebServlet("/product")
 public class ProductDetailServlet extends HttpServlet {
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-		int id = Integer.parseInt(req.getParameter("id"));
+        int id = Integer.parseInt(req.getParameter("id"));
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		Product product = session.get(Product.class, id);
-		session.close();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Product product = session.get(Product.class, id);
+        session.close();
 
-		req.setAttribute("product", product);
-		req.getRequestDispatcher("products/product-detail.jsp").forward(req, res);
-	}
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		doGet(req, res);
-	}
+        req.setAttribute("product", product);
+        req.getRequestDispatcher("products/product-detail.jsp").forward(req, res);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        doGet(req, res);
+    }
 }

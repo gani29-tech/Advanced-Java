@@ -4,7 +4,7 @@
 <h2>Checkout</h2>
 
 <form action="${pageContext.request.contextPath}/orderitem" method="post">
-    <input type="hidden" name="productId" value = "${product.id}">
+    <input type="hidden" name="productId" value = "${productId}">
     Address:<br>
     <textarea name="address" required></textarea><br><br>
     Payment Mode:
