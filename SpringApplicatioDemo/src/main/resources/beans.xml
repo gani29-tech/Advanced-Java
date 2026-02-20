@@ -25,14 +25,14 @@
         <constructor-arg ref="address1"></constructor-arg>
     </bean>
     <bean id="address1" class="org.constructorinjection.Address">
-        <constructor-arg value="Rachabanda"></constructor-arg>
-        <constructor-arg value="Warangal"></constructor-arg>
+        <constructor-arg value="Rachabanda"/>
+        <constructor-arg><value>Mgl</value></constructor-arg>
         <constructor-arg value="Telangana"></constructor-arg>
         <constructor-arg value="506006"></constructor-arg>
     </bean>
     <bean id="si" class="org.setterinjection.Student">
-        <property name="id" value="2363"></property>
-        <property name="name" value="Ganesh"></property>
+        <property name="id" value="2363"/>
+        <property name="name"><value>Ganesh</value></property>
         <property name="address">
             <list>
                 <value>Rachabanda</value>
