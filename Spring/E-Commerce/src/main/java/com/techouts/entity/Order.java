@@ -1,24 +1,26 @@
 package com.techouts.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @OneToOne
     private User user;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
-    private double price;
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
+    private LocalDateTime orderDate;
+    private double totalAmount;
 }

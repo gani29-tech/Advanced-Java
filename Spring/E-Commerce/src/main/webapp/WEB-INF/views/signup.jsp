@@ -1,78 +1,109 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Sign Up - E-Commerce</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            background: linear-gradient(to right, #4e73df, #1cc88a);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        .signup-container {
-            background-color: white;
+
+        .container {
+            background: #ffffff;
             padding: 30px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             width: 400px;
         }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: #333;
         }
+
         label {
-            display: block;
+            font-weight: bold;
             margin-top: 10px;
+            display: block;
         }
-        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], textarea {
+
+        input, textarea {
             width: 100%;
-            padding: 8px;
+            padding: 8px 10px;
             margin-top: 5px;
-            border-radius: 4px;
+            margin-bottom: 15px;
+            border-radius: 5px;
             border: 1px solid #ccc;
+            font-size: 14px;
         }
-        textarea {
-            resize: vertical;
+
+        input:focus, textarea:focus {
+            border-color: #4e73df;
+            outline: none;
         }
+
         button {
             width: 100%;
-            margin-top: 20px;
             padding: 10px;
-            border: none;
-            background-color: #28a745;
+            background-color: #4e73df;
             color: white;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
-            border-radius: 4px;
             cursor: pointer;
+            transition: 0.3s;
         }
+
         button:hover {
-            background-color: #218838;
+            background-color: #2e59d9;
         }
+
         .message {
-            margin-top: 10px;
-            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-size: 14px;
         }
-        .message.error { color: red; }
-        .message.success { color: green; }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
         .login-link {
-            margin-top: 15px;
             text-align: center;
+            margin-top: 15px;
         }
+
         .login-link a {
             text-decoration: none;
-            color: #007bff;
+            color: #4e73df;
+            font-weight: bold;
         }
+
         .login-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
-<div class="signup-container">
+
+<div class="container">
     <h2>Sign Up</h2>
 
     <c:if test="${not empty error}">
@@ -84,27 +115,30 @@
     </c:if>
 
     <form action="signup" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required/>
+        <label>Username:</label>
+        <input type="text" name="username" required/>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required/>
+        <label>Password:</label>
+        <input type="password" name="password" required/>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required/>
+        <label>Email:</label>
+        <input type="email" name="email" required/>
 
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required/>
+        <label>Phone:</label>
+        <input type="tel" name="phone" required/>
 
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="3" required></textarea>
+        <label>Address:</label>
+        <textarea name="address" rows="3" required></textarea>
 
         <button type="submit">Sign Up</button>
     </form>
 
     <div class="login-link">
-        Already have an account? <a href="<c:url value='/login'/>">Login here</a>
+        <p>Already have an account?
+            <a href="<c:url value='/login'/>">Login here</a>
+        </p>
     </div>
 </div>
+
 </body>
 </html>

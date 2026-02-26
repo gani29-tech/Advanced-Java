@@ -1,173 +1,152 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Home - E-Commerce</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: #f4f4f4;
             margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
+            padding: 20px;
         }
 
-        .navbar {
-            background-color: #007bff;
-            padding: 15px 20px;
-            color: white;
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
 
-        .navbar a {
-            color: white;
+        .user-info a, .user-info span {
+            margin-right: 15px;
             text-decoration: none;
-            margin-left: 15px;
+            color: #4e73df;
             font-weight: bold;
         }
 
-        .container {
-            padding: 20px;
-            max-width: 1000px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+
+        .cart-link {
+            margin-left: 20px;
+            font-weight: bold;
+            color: #1cc88a;
         }
 
         h2 {
-            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 15px;
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 30%;
+            box-sizing: border-box;
             text-align: center;
         }
 
-        th {
-            background-color: #f0f0f0;
-        }
-
-        img {
+        .product-card img {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: contain;
             border-radius: 5px;
         }
 
-        .btn {
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 3px;
-            color: white;
-            margin: 2px;
+        .product-card h3 {
+            margin: 10px 0 5px 0;
+            font-size: 18px;
+            color: #333;
         }
 
-        .btn-add { background-color: green; }
-        .btn-update { background-color: orange; }
-        .btn-delete { background-color: red; }
-        .btn-view { background-color: blue; }
-
-        .filter {
-            margin-bottom: 15px;
-        }
-
-        select {
-            padding: 5px 10px;
-        }
-
-        .empty-message {
-            text-align: center;
+        .product-card p {
+            margin: 5px 0;
             color: #555;
-            font-style: italic;
-            margin-top: 20px;
+        }
+
+        .product-card .actions {
+            margin-top: 10px;
+        }
+
+        .product-card .actions a {
+            text-decoration: none;
+            margin: 0 5px;
+            color: #4e73df;
+            font-weight: bold;
+        }
+
+        .product-card .actions a:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 900px) {
+            .product-card {
+                width: 45%;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .product-card {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div>
-        Welcome, ${currentUser.username}
-    </div>
-
-    <div>
+<header>
+    <div class="user-info">
+        <span>Welcome, ${user.username}</span>
         <a href="${pageContext.request.contextPath}/user/update">Update Profile</a>
-        <a href="${pageContext.request.contextPath}/user/logout">Logout</a>
+        <a href="${pageContext.request.contextPath}/logout">Logout</a>
+        <a href="${pageContext.request.contextPath}/cart/show" class="cart-link">Cart</a>
+        <c:if test="${user.id == 1}">
+            <a href="${pageContext.request.contextPath}/product/add">Add Product</a>
+        </c:if>
     </div>
-</div>
+</header>
 
-<div class="container">
+<h2>Products</h2>
 
-    <c:if test="${currentUser.id == 1}">
-        <a href="${pageContext.request.contextPath}/product/add" class="btn btn-add">Add Product</a>
-    </c:if>
-
-    <!-- Category Filter -->
-    <div class="filter">
-        <form method="GET" action="${pageContext.request.contextPath}/">
-            <label for="categoryFilter">Filter by Category:</label>
-            <select name="category" id="categoryFilter" onchange="this.form.submit()">
-                <option value="">All Categories</option>
-                <c:forEach var="cat" items="${categories}">
-                    <option value="${cat}" <c:if test="${param.category == cat}">selected</c:if>>${cat}</option>
-                </c:forEach>
-            </select>
-        </form>
-    </div>
-
-    <h2>Products</h2>
-
-    <c:choose>
-        <c:when test="${not empty products}">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Image</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-
-                <c:forEach var="product" items="${products}">
-                    <tr>
-                        <td>${product.id}</td>
-                        <td>${product.name}</td>
-                        <td>${product.category}</td>
-                        <td>
-                            <c:if test="${not empty product.image}">
-                                <img src="/uploads/product/${product.image}" width="80"/>
-                            </c:if>
-                        </td>
-                        <td>${product.description}</td>
-                        <td>${product.price}</td>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/product/details/${product.id}" class="btn btn-view">View</a>
-                            <c:if test="${currentUser.id == 1}">
-                                <a href="${pageContext.request.contextPath}/product/update/${product.id}" class="btn btn-update">Update</a>
-                                <a href="${pageContext.request.contextPath}/product/delete/${product.id}" class="btn btn-delete"
-                                   onclick="return confirm('Are you sure?')">Delete</a>
-                            </c:if>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </c:when>
-        <c:otherwise>
-            <p class="empty-message">No products available.</p>
-        </c:otherwise>
-    </c:choose>
-
-</div>
+<c:choose>
+    <c:when test="${not empty products}">
+        <div class="product-grid">
+            <c:forEach var="product" items="${products}">
+                <div class="product-card">
+                    <c:if test="${not empty product.image}">
+                        <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}"/>
+                    </c:if>
+                    <h3>${product.name}</h3>
+                    <p>Category: ${product.category}</p>
+                    <p>Price: $${product.price}</p>
+                    <div class="actions">
+                        <a href="${pageContext.request.contextPath}/product/details/${product.id}">View</a>
+                        <a href="${pageContext.request.contextPath}/cart/add/${product.id}">Add to Cart</a>
+                        <c:if test="${user.id == 1}">
+                            <a href="${pageContext.request.contextPath}/product/update/${product.id}">Update</a>
+                            <a href="${pageContext.request.contextPath}/product/delete/${product.id}"
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </c:if>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <p style="text-align:center;">No products available.</p>
+    </c:otherwise>
+</c:choose>
 
 </body>
 </html>

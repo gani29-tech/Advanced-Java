@@ -1,22 +1,21 @@
 package com.techouts.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "cart_items")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @ManyToOne
+    private long id;
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
     private int quantity;
     @ManyToOne
-    private MyCart myCart;
+    private Cart cart;
 }

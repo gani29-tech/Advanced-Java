@@ -1,14 +1,13 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login - E-Commerce</title>
+    <title>Update Profile - E-Commerce</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #36b9cc, #4e73df);
+            background: linear-gradient(to right, #f6c23e, #4e73df);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,7 +20,7 @@
             padding: 30px 40px;
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            width: 350px;
+            width: 400px;
         }
 
         h2 {
@@ -36,7 +35,7 @@
             display: block;
         }
 
-        input {
+        input, textarea {
             width: 100%;
             padding: 8px 10px;
             margin-top: 5px;
@@ -46,15 +45,19 @@
             font-size: 14px;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             border-color: #4e73df;
             outline: none;
+        }
+
+        textarea {
+            resize: none;
         }
 
         button {
             width: 100%;
             padding: 10px;
-            background-color: #4e73df;
+            background-color: #1cc88a;
             color: white;
             border: none;
             border-radius: 5px;
@@ -64,39 +67,21 @@
         }
 
         button:hover {
-            background-color: #2e59d9;
+            background-color: #17a673;
         }
 
-        .message {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .signup-link {
+        .back-link {
             text-align: center;
             margin-top: 15px;
         }
 
-        .signup-link a {
+        .back-link a {
             text-decoration: none;
             color: #4e73df;
             font-weight: bold;
         }
 
-        .signup-link a:hover {
+        .back-link a:hover {
             text-decoration: underline;
         }
     </style>
@@ -105,30 +90,29 @@
 <body>
 
 <div class="container">
-    <h2>Login</h2>
+    <h2>Update Profile</h2>
 
-    <c:if test="${not empty param.error}">
-        <div class="message error">Invalid username or password.</div>
-    </c:if>
+    <form action="${pageContext.request.contextPath}/user/update" method="post">
+        <input type="hidden" name="id" value="${user.id}"/>
+        <input type="hidden" name="password" value="${user.password}"/>
 
-    <c:if test="${not empty param.logout}">
-        <div class="message success">Logged out successfully.</div>
-    </c:if>
-
-    <form action="${pageContext.request.contextPath}/login" method="post">
         <label>Username:</label>
-        <input type="text" name="username" required />
+        <input type="text" name="username" value="${user.username}" required/>
 
-        <label>Password:</label>
-        <input type="password" name="password" required />
+        <label>Email:</label>
+        <input type="email" name="email" value="${user.email}" required/>
 
-        <button type="submit">Login</button>
+        <label>Phone:</label>
+        <input type="text" name="phone" value="${user.phone}" required/>
+
+        <label>Address:</label>
+        <textarea name="address" rows="3" required>${user.address}</textarea>
+
+        <button type="submit">Update</button>
     </form>
 
-    <div class="signup-link">
-        <p>Don't have an account?
-            <a href="<c:url value='/signup'/>">Sign Up here</a>
-        </p>
+    <div class="back-link">
+        <p><a href="<c:url value='/home'/>">Back to Home</a></p>
     </div>
 </div>
 

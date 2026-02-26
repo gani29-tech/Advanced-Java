@@ -1,55 +1,66 @@
 package com.techouts.repositoryimplementation;
 
+import com.techouts.entity.Cart;
+import com.techouts.entity.Order;
 import com.techouts.entity.Product;
+import com.techouts.entity.User;
 import com.techouts.repository.ProductRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
+@Transactional
 public class ProductRepoImplementation implements ProductRepo {
+
     @PersistenceContext
     private EntityManager em;
+
     @Override
-    public void addProduct(Product product) {
-        try{
-            em.persist(product);
-        }catch (Exception e){
-        }
-    }
-    @Override
-    public Product getProductById(int id) {
-        return em.find(Product.class,id);
-    }
-    @Override
-    public void deleteProduct(String name) {
-        try {
-            Product product = em.createQuery("from Product p where p.name = :name", Product.class)
-                    .setParameter("name", name)
-                    .getSingleResult();
-            em.remove(product);
-        }catch (Exception e){
-        }
+    public Product addProduct(Product product) {
+        em.persist(product);
+        return product;
     }
 
     @Override
-    public Product getProductByName(String name) {
-        return em.createQuery("From Product p where p.name=:name", Product.class)
+    public Product updateProduct(Product product) {
+        return em.merge(product);
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+        em.createQuery("delete from CartItem where product.id = :id")
+                .setParameter("id", product.getId())
+                .executeUpdate();
+        em.createQuery("delete from OrderItem where product.id = :id")
+                .setParameter("id", product.getId())
+                .executeUpdate();
+        em.remove(em.contains(product) ? product : em.merge(product));
+    }
+
+    @Override
+    public Product findById(Long id) {
+        return em.find(Product.class, id);
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
+    }
+
+    @Override
+    public List<String> getAllCategories() {
+        return em.createQuery("SELECT c.category FROM Product c", String.class).getResultList();
+    }
+    @Override
+    public boolean productExists(String name,long id) {
+        List<Product> product = em.createQuery("from Product where name = :name and id<>:id", Product.class)
                 .setParameter("name", name)
-                .getSingleResult();
-    }
-
-    @Override
-    public List<Product> getAllProducts() {
-        return  em.createQuery("From Product", Product.class).getResultList();
-    }
-
-    @Override
-    public boolean productExists(String name,int id) {
-        List<Product> products =em.createQuery("from Product p where p.name=:name and p.id<>:id",Product.class)
-                .setParameter("name",name)
-                .setParameter("id",id).getResultList();
-        return !products.isEmpty();
+                .setParameter("id", id)
+                .getResultList();
+        return !product.isEmpty();
     }
 }

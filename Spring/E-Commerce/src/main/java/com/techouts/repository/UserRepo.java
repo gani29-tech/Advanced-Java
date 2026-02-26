@@ -3,11 +3,10 @@ package com.techouts.repository;
 import com.techouts.entity.User;
 
 public interface UserRepo {
-    void saveUser(User user);
-    User findUserByUsername(String username);
-    User findUserByEmail(String email);
-    boolean usernameExists(String username,int id);
-    boolean emailExists(String email,int id);
-    User findUserById(int id);
-    User loadUserByUsername(String username);
+    User findById(Long id);
+    User findByEmail(String email);
+    void save(User user);
+    User findByUsername(String username);
+    boolean emailExists(String email,long id);
+    boolean usernameExists(String username,long id);
 }

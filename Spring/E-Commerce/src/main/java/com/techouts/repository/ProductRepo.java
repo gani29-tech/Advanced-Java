@@ -1,15 +1,16 @@
 package com.techouts.repository;
 
 import com.techouts.entity.Product;
+import com.techouts.entity.User;
 
 import java.util.List;
 
 public interface ProductRepo {
-    void addProduct(Product product);
-    void deleteProduct(String name);
-    Product getProductById(int id);
-    Product getProductByName(String name);
-    boolean productExists(String name,int id);
-    List<Product> getAllProducts();
-
+    Product addProduct(Product product);
+    Product updateProduct(Product product);
+    void deleteProduct(Product product);
+    boolean productExists(String name,long id);
+    Product findById(Long id);
+    List<Product> findAll();
+    List<String> getAllCategories();
 }

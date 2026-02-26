@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
@@ -19,7 +21,7 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.techouts")
 @EnableTransactionManagement
-public class WebMvcConfig {
+public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -57,5 +59,10 @@ public class WebMvcConfig {
     @Bean
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:///C:/Users/tech/IdeaProjects/Advanced-Java/Spring/E-Commerce/uploads/");
     }
 }

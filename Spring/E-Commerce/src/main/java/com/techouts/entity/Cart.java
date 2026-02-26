@@ -1,24 +1,25 @@
 package com.techouts.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "My_cart")
-public class MyCart {
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @OneToMany(mappedBy = "myCart", cascade = CascadeType.ALL)
-    private List<CartItem> items;
+    private long id;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
     private int totalPrice;
     @OneToOne
     private User user;
+
 }
