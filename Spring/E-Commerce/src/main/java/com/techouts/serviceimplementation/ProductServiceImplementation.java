@@ -90,6 +90,13 @@ public class ProductServiceImplementation implements ProductService {
         return productRepo.getAllCategories();
     }
 
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return getAllProducts().stream()
+                .filter(p -> category.equalsIgnoreCase(p.getCategory()))
+                .toList();
+    }
+
     private void saveFile(MultipartFile file, String filename) throws IOException {
         File uploadFolder = new File(uploadDir);
         if (!uploadFolder.exists()) uploadFolder.mkdirs();

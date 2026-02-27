@@ -6,7 +6,7 @@ import com.techouts.entity.User;
 import java.util.List;
 
 public interface OrderService {
-    void saveOrder(Order order);
     Order getOrderById(long id);
     List<Order> getOrdersByUser(User user);
+    boolean cancelOrder(long orderId);
 }

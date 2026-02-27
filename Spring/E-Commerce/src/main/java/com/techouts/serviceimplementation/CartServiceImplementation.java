@@ -1,11 +1,6 @@
 package com.techouts.serviceimplementation;
 
-import com.techouts.entity.Cart;
-import com.techouts.entity.CartItem;
-import com.techouts.entity.Order;
-import com.techouts.entity.OrderItem;
-import com.techouts.entity.Product;
-import com.techouts.entity.User;
+import com.techouts.entity.*;
 import com.techouts.repository.CartRepo;
 import com.techouts.repository.OrderRepo;
 import com.techouts.service.CartService;
@@ -38,15 +33,25 @@ public class CartServiceImplementation implements CartService {
 
     @Override
     @Transactional
-    public void addCartItem(User user, Product product, int quantity) {
-        Cart cart = getCartByUser(user);
-        System.out.println("cart id is : "+cart.getId());
-        CartItem item = new CartItem();
-        item.setProduct(product);
-        item.setQuantity(quantity);
-        item.setCart(cart);
-        cart.getCartItems().add(item);
-        cartRepo.save(cart);
+    public void addCartItem(User user, Product product) {
+        Cart cart = cartRepo.getCartByUser(user);
+        boolean productExists = false;
+        for (CartItem item : cart.getCartItems()) {
+            if (item.getProduct().getId() == product.getId()) {
+                item.setQuantity(item.getQuantity() + 1);
+                productExists = true;
+                cartRepo.save(cart);
+                break;
+            }
+        }
+        if(!productExists){
+             CartItem item = new CartItem();
+             item.setProduct(product);
+             item.setQuantity(1);
+             item.setCart(cart);
+             cart.getCartItems().add(item);
+            cartRepo.save(cart);
+        }
     }
 
     @Override
@@ -71,29 +76,29 @@ public class CartServiceImplementation implements CartService {
 
     @Override
     @Transactional
-    public void checkout(User user) {
+    public void checkout(User user, CheckoutRequest request) {
         Cart cart = getCartByUser(user);
         if (cart.getCartItems().isEmpty()) return;
-
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
-
-        double total = 0;
-        for (CartItem cartItem : cart.getCartItems()) {
+        order.setCity(request.getCity());
+        order.setAddress(request.getAddress());
+        order.setState(request.getState());
+        order.setPincode(request.getPincode());
+        order.setPaymentType(request.getPaymentType());
+        order.setStatus("PLACED");
+        for(CartItem item : cart.getCartItems()){
             OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(cartItem.getProduct());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getProduct().getPrice());
-            orderItem.setOrder(order);
+            orderItem.setProduct(item.getProduct());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(item.getProduct().getPrice()*item.getQuantity());
             order.getOrderItems().add(orderItem);
-
-            total += cartItem.getQuantity() * cartItem.getProduct().getPrice();
+            orderItem.setOrder(order);
         }
-
+        double total = cart.getTotalPrice();
         order.setTotalAmount(total);
         orderRepo.save(order);
-
         cart.getCartItems().clear();
         cartRepo.save(cart);
     }
@@ -104,6 +109,6 @@ public class CartServiceImplementation implements CartService {
     }
 
     private CartItem getCartItemById(long id) {
-        return null;
+        return cartRepo.getCartItemById(id);
     }
 }

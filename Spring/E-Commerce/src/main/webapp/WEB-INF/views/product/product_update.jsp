@@ -150,7 +150,7 @@
     </c:if>
 
     <form:form method="POST"
-               action="${pageContext.request.contextPath}/product/update"
+               action="${pageContext.request.contextPath}/admin/update"
                modelAttribute="product"
                enctype="multipart/form-data">
 

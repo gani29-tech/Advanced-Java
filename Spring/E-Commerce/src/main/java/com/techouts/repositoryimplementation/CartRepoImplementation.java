@@ -41,4 +41,9 @@ public class CartRepoImplementation implements CartRepo {
                 .setParameter("productId", productId).getResultList();
         return !cartItems.isEmpty() ? cartItems.get(0) : null;
     }
+
+    @Override
+    public CartItem getCartItemById(long id) {
+        return em.find(CartItem.class, id);
+    }
 }

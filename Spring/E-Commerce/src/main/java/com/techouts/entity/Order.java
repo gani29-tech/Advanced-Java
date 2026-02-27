@@ -17,10 +17,17 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
     private LocalDateTime orderDate;
     private double totalAmount;
+    @Column(length = 100)
+    private String address;
+    private String city;
+    private String state;
+    private String pincode;
+    private String status;
+    private String paymentType;
 }

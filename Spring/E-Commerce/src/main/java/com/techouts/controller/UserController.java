@@ -1,13 +1,21 @@
 package com.techouts.controller;
 
+import com.techouts.entity.Product;
 import com.techouts.entity.User;
 import com.techouts.service.ProductService;
 import com.techouts.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -42,12 +50,19 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public String home(HttpSession session,Model model, @AuthenticationPrincipal User u) {
+    public String home(HttpSession session, Model model, @AuthenticationPrincipal User u,
+                       @RequestParam(name = "category", defaultValue = "All") String category) {
         User user = userService.getUserById(u.getId());
+        List<Product> products;
+        if(category.equalsIgnoreCase("All"))
+            products = productService.getAllProducts();
+        else
+            products = productService.getProductsByCategory(category);
         session.setAttribute("user", user);
         model.addAttribute("user", user);
-        model.addAttribute("categories", productService.getAllCategories());
-        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("categories", productService.getAllCategories().stream().distinct().sorted().toList());
+        model.addAttribute("products", products);
+        model.addAttribute("selectedCategory", category);
         return "home";
     }
     @GetMapping("/")
@@ -71,10 +86,5 @@ public class UserController {
             model.addAttribute("error",e.getMessage());
             return "user_update";
         }
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/login?logout=true";
     }
 }

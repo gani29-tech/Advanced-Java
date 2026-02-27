@@ -1,5 +1,7 @@
 package com.techouts.serviceimplementation;
 
+import com.techouts.entity.Cart;
+import com.techouts.entity.Order;
 import com.techouts.entity.User;
 import com.techouts.repository.UserRepo;
 import com.techouts.service.UserService;
@@ -35,6 +37,9 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
             throw new IllegalArgumentException("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Cart cart = new Cart();
+        cart.setUser(user);
+        user.setCart(cart);
         userRepo.save(user);
     }
 

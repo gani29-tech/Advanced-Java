@@ -106,29 +106,35 @@
 <div class="container">
     <h2>Sign Up</h2>
 
+    <!-- Display Error Message -->
     <c:if test="${not empty error}">
         <div class="message error">${error}</div>
     </c:if>
 
+    <!-- Display Success Message -->
     <c:if test="${not empty success}">
         <div class="message success">${success}</div>
     </c:if>
 
-    <form action="signup" method="post">
+    <!-- Signup Form -->
+    <form action="<c:url value='/signup'/>" method="post">
         <label>Username:</label>
-        <input type="text" name="username" required/>
+        <input type="text" name="username" required autocomplete="username"/>
+
+        <input type="hidden" name="role" value="ROLE_USER"/>
 
         <label>Password:</label>
-        <input type="password" name="password" required/>
+        <input type="password" name="password" required autocomplete="new-password"/>
 
         <label>Email:</label>
-        <input type="email" name="email" required/>
+        <input type="email" name="email" required autocomplete="email"/>
 
         <label>Phone:</label>
-        <input type="tel" name="phone" required/>
+        <input type="tel" name="phone" required pattern="[0-9]{10}"
+               title="Enter 10 digit phone number" autocomplete="tel"/>
 
         <label>Address:</label>
-        <textarea name="address" rows="3" required></textarea>
+        <textarea name="address" rows="3" required autocomplete="street-address"></textarea>
 
         <button type="submit">Sign Up</button>
     </form>

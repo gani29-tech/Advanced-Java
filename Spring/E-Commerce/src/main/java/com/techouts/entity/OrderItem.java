@@ -17,6 +17,6 @@ public class OrderItem {
     private double price;
     @ManyToOne
     private Order order;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 }

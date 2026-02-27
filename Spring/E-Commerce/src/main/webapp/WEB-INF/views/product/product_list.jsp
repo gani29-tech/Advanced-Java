@@ -2,124 +2,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Product List</title>
+    <title>Product List - Techouts Ecommerce</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            padding: 20px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f3f6fb; color: #333; padding-bottom: 40px; }
 
-        h2 {
-            text-align: center;
-            color: #333;
-        }
+        /* Top links / Header */
+        .top-links { background-color: #2c3e50; padding: 15px 30px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+        .top-links a { text-decoration: none; color: #ecf0f1; padding: 8px 15px; border-radius: 5px; font-weight: bold; transition: background 0.3s; }
+        .top-links a:hover { background-color: #34495e; }
 
-        .home-link {
-            margin-bottom: 20px;
-            display: block;
-            text-align: center;
-        }
+        h2 { text-align: center; margin: 30px 0 20px; color: #2c3e50; }
 
-        .home-link a {
-            text-decoration: none;
-            color: #1cc88a;
-            font-weight: bold;
-            font-size: 16px;
-        }
+        /* Category filter */
+        .category-filter { text-align: center; margin-bottom: 20px; }
+        .category-filter a { display: inline-block; margin: 0 8px 8px 8px; padding: 6px 14px; text-decoration: none; border-radius: 5px; color: white; background-color: #6c7ae0; font-weight: bold; transition: background 0.3s; }
+        .category-filter a.active, .category-filter a:hover { background-color: #34495e; }
 
-        .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
+        /* Product grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 0 30px; }
 
+        /* Product card */
         .product-card {
-            background: #fff;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             padding: 15px;
-            width: 30%;
-            box-sizing: border-box;
             text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .product-card img { max-width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; border-radius: 5px; }
+        .product-card h3 { margin: 10px 0 5px; font-size: 18px; color: #34495e; }
+        .product-card p { margin: 5px 0; color: #555; font-size: 14px; }
 
-        .product-card img {
-            max-width: 100%;
-            max-height: 150px;
-            object-fit: contain;
-            border-radius: 5px;
-        }
+        /* Action buttons */
+        .actions { margin-top: 10px; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
+        .actions a { text-decoration: none; display: inline-block; padding: 6px 12px; font-size: 14px; border-radius: 4px; transition: background 0.3s; }
+        .actions a[href*="/cart/add"] { background-color: #27ae60; color: white; }
+        .actions a[href*="/cart/buynow"] { background-color: #e67e22; color: white; } /* Buy Now button */
+        .actions a.admin { background-color: #e74c3c; color: white; }
 
-        .product-card h3 {
-            margin: 10px 0 5px 0;
-            font-size: 18px;
-            color: #333;
-        }
+        /* No products message */
+        p { text-align: center; font-size: 16px; color: #555; margin-top: 30px; }
 
-        .product-card p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .product-card .actions {
-            margin-top: 10px;
-        }
-
-        .product-card .actions a {
-            text-decoration: none;
-            margin: 0 5px;
-            color: #4e73df;
-            font-weight: bold;
-        }
-
-        .product-card .actions a:hover {
-            text-decoration: underline;
-        }
-
-        @media screen and (max-width: 900px) {
-            .product-card {
-                width: 45%;
-            }
-        }
-
-        @media screen and (max-width: 600px) {
-            .product-card {
-                width: 100%;
-            }
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .product-card img { height: 120px; }
+            .top-links { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 <body>
 
-<h2>All Products</h2>
+<h2>Product List</h2>
 
-<div class="home-link">
-    <a href="${pageContext.request.contextPath}/home">Home</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <c:if test="${user.id == 1}">
-        <a href="${pageContext.request.contextPath}/product/add">Add Product</a>
+<!-- Top links / Header -->
+<div class="top-links">
+    <a href="${pageContext.request.contextPath}/home">Home</a>
+    <a href="${pageContext.request.contextPath}/cart/show">Cart</a>
+    <c:if test="${user.role=='ROLE_ADMIN'}">
+        <a href="${pageContext.request.contextPath}/admin/add">Add Product</a>
     </c:if>
 </div>
 
-<div class="product-grid">
-    <c:forEach var="product" items="${products}">
-        <div class="product-card">
-            <c:if test="${not empty product.image}">
-                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}"/>
-            </c:if>
-            <h3>${product.name}</h3>
-            <p>Category: ${product.category}</p>
-            <p>Price: $${product.price}</p>
-            <div class="actions">
-                <a href="${pageContext.request.contextPath}/product/details/${product.id}">View</a>
-                <a href="${pageContext.request.contextPath}/product/update/${product.id}">Update</a>
-                <a href="${pageContext.request.contextPath}/product/delete/${product.id}"
-                   onclick="return confirm('Are you sure?')">Delete</a>
-            </div>
-        </div>
+<!-- Category Filter -->
+<div class="category-filter"><br>
+    <h3>Categories</h3>
+    <c:forEach var="cat" items="${categories}">
+        <a href="${pageContext.request.contextPath}/product/list?category=${cat}" class="${selectedCategory == cat ? 'active' : ''}">${cat}</a>
     </c:forEach>
+    <a href="${pageContext.request.contextPath}/product/list?category=All" class="${selectedCategory == 'All' ? 'active' : ''}">All</a>
 </div>
+
+<!-- Product Grid -->
+<c:choose>
+    <c:when test="${not empty products}">
+        <div class="product-grid">
+            <c:forEach var="product" items="${products}">
+                <div class="product-card" onclick="window.location.href='${pageContext.request.contextPath}/product/details/${product.id}'">
+                    <c:if test="${not empty product.image}">
+                        <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}"/>
+                    </c:if>
+                    <h3>${product.name}</h3>
+                    <p>Category: ${product.category}</p>
+                    <p>Price: $${product.price}</p>
+                    <div class="actions">
+                        <a href="${pageContext.request.contextPath}/cart/add/${product.id}">Add to Cart</a>
+                        <a href="${pageContext.request.contextPath}/cart/buynow/${product.id}">Buy Now</a>
+                        <c:if test="${user.role=='ROLE_ADMIN'}">
+                            <a href="${pageContext.request.contextPath}/admin/update/${product.id}" class="admin">Update</a>
+                            <a href="${pageContext.request.contextPath}/admin/delete/${product.id}" class="admin"
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </c:if>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <p>No products available.</p>
+    </c:otherwise>
+</c:choose>
 
 </body>
 </html>

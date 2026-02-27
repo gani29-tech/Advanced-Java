@@ -48,6 +48,7 @@
 </c:if>
 
 <a href="${pageContext.request.contextPath}/home">Continue Shopping</a>
+<a href="${pageContext.request.contextPath}/order/list">Go to Orders</a>
 
 </body>
 </html>

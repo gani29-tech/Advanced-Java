@@ -1,152 +1,133 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home - E-Commerce</title>
+    <title>Techouts E-Commerce</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+        /* Reset & base */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(to bottom, #f0f4ff, #d9e6ff); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        /* Header */
+        header { background-color: #ffffff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 0 0 12px 12px; }
+        header .brand { font-weight: 700; font-size: 24px; color: #6c7ae0; }
+        header .welcome { font-weight: 600; font-size: 16px; color: #2c3e50; }
+        header .welcome a { font-size: 14px; margin-left: 10px; padding: 4px 10px; border-radius: 6px; background-color: #6c7ae0; color: white; text-decoration: none; transition: 0.3s; }
+        header .welcome a:hover { background-color: #34495e; }
+        header .user-links a { color: #2c3e50; text-decoration: none; margin-left: 10px; padding: 6px 12px; border-radius: 6px; transition: 0.3s; background-color: #f9f9f9; border: 1px solid #ddd; }
+        header .user-links a:hover { background-color: #2c3e50; color: white; }
 
-        .user-info a, .user-info span {
-            margin-right: 15px;
-            text-decoration: none;
-            color: #4e73df;
-            font-weight: bold;
-        }
+        /* Layout */
+        .container { display: flex; max-width: 1200px; margin: 40px auto; gap: 20px; flex: 1; }
+        .categories { width: 220px; background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .categories h3 { margin-bottom: 15px; color: #2c3e50; font-size: 22px; text-align: left; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+        .categories a { display: block; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; border-radius: 6px; background-color: #6c7ae0; color: #fff; font-weight: 500; transition: 0.3s; }
+        .categories a.active, .categories a:hover { background-color: #34495e; }
 
-        .user-info a:hover {
-            text-decoration: underline;
-        }
+        .product-section { flex: 1; }
+        h2 { text-align: left; margin-bottom: 25px; color: #2c3e50; font-size: 28px; }
 
-        .cart-link {
-            margin-left: 20px;
-            font-weight: bold;
-            color: #1cc88a;
-        }
+        /* Product grid */
+        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+        @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .container { flex-direction: column; } .product-grid { grid-template-columns: 1fr; } }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        /* Product card */
+        .product-card { background-color: #ffffff; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; position: relative; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+        .product-card img { max-width: 100%; height: 160px; object-fit: contain; margin-bottom: 15px; border-radius: 12px; }
+        .product-card h3 { margin: 10px 0 8px; font-size: 20px; color: #2c3e50; }
+        .product-card p { margin: 5px 0; color: #555; font-size: 15px; }
 
-        .product-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
+        /* Action buttons */
+        .actions { margin-top: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; pointer-events: auto; }
+        .actions a { text-decoration: none; display: inline-block; padding: 8px 14px; font-size: 14px; border-radius: 8px; transition: 0.3s; }
+        .actions a[href*="/cart/add"] { background-color: #27ae60; color: white; }
+        .actions a[href*="/cart/buynow"] { background-color: #e67e22; color: white; }
+        .actions a[href*="/cart/add"]:hover { background-color: #219150; }
+        .actions a[href*="/cart/buynow"]:hover { background-color: #d35400; }
+        .actions a.admin { background-color: #e74c3c; color: white; }
+        .actions a.admin:hover { background-color: #c0392b; }
 
-        .product-card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 15px;
-            width: 30%;
-            box-sizing: border-box;
-            text-align: center;
-        }
+        /* No products */
+        p { text-align: center; font-size: 16px; color: #555; margin-top: 40px; }
 
-        .product-card img {
-            max-width: 100%;
-            max-height: 150px;
-            object-fit: contain;
-            border-radius: 5px;
-        }
+        /* Footer */
+        footer { background-color: #2c3e50; color: #ecf0f1; padding: 20px 40px; text-align: center; border-radius: 12px 12px 0 0; margin-top: 40px; }
+        footer a { color: #6c7ae0; text-decoration: none; margin: 0 10px; }
+        footer a:hover { text-decoration: underline; }
 
-        .product-card h3 {
-            margin: 10px 0 5px 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .product-card p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .product-card .actions {
-            margin-top: 10px;
-        }
-
-        .product-card .actions a {
-            text-decoration: none;
-            margin: 0 5px;
-            color: #4e73df;
-            font-weight: bold;
-        }
-
-        .product-card .actions a:hover {
-            text-decoration: underline;
-        }
-
-        @media screen and (max-width: 900px) {
-            .product-card {
-                width: 45%;
-            }
-        }
-
-        @media screen and (max-width: 600px) {
-            .product-card {
-                width: 100%;
-            }
-        }
+        /* Responsive header */
+        @media (max-width: 600px) { header { flex-direction: column; align-items: flex-start; gap: 10px; } .product-card img { height: 140px; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="user-info">
-        <span>Welcome, ${user.username}</span>
+    <div class="brand">Techouts E-Commerce</div>
+    <div class="welcome">
+        Welcome, ${user.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/user/update">Update Profile</a>
+    </div>
+    <div class="user-links">
+        <a href="${pageContext.request.contextPath}/cart/show">Cart</a>
+        <a href="${pageContext.request.contextPath}/product/list">Product List</a>
+        <a href="${pageContext.request.contextPath}/order/list">Orders</a>
         <a href="${pageContext.request.contextPath}/logout">Logout</a>
-        <a href="${pageContext.request.contextPath}/cart/show" class="cart-link">Cart</a>
-        <c:if test="${user.id == 1}">
-            <a href="${pageContext.request.contextPath}/product/add">Add Product</a>
-        </c:if>
     </div>
 </header>
 
-<h2>Products</h2>
+<div class="container">
+    <!-- Categories -->
+    <div class="categories">
+        <h3>Categories</h3>
+        <c:forEach var="cat" items="${categories}">
+            <a href="${pageContext.request.contextPath}/home?category=${cat}"
+               class="${selectedCategory == cat ? 'active' : ''}">${cat}</a>
+        </c:forEach>
+        <a href="${pageContext.request.contextPath}/home?category=All"
+           class="${selectedCategory == 'All' ? 'active' : ''}">All</a>
+    </div>
 
-<c:choose>
-    <c:when test="${not empty products}">
-        <div class="product-grid">
-            <c:forEach var="product" items="${products}">
-                <div class="product-card">
-                    <c:if test="${not empty product.image}">
-                        <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}"/>
-                    </c:if>
-                    <h3>${product.name}</h3>
-                    <p>Category: ${product.category}</p>
-                    <p>Price: $${product.price}</p>
-                    <div class="actions">
-                        <a href="${pageContext.request.contextPath}/product/details/${product.id}">View</a>
-                        <a href="${pageContext.request.contextPath}/cart/add/${product.id}">Add to Cart</a>
-                        <c:if test="${user.id == 1}">
-                            <a href="${pageContext.request.contextPath}/product/update/${product.id}">Update</a>
-                            <a href="${pageContext.request.contextPath}/product/delete/${product.id}"
-                               onclick="return confirm('Are you sure?')">Delete</a>
-                        </c:if>
-                    </div>
+    <!-- Products -->
+    <div class="product-section">
+        <h2>Products</h2>
+        <c:choose>
+            <c:when test="${not empty products}">
+                <div class="product-grid">
+                    <c:forEach var="product" items="${products}">
+                        <div class="product-card" onclick="window.location.href='${pageContext.request.contextPath}/product/details/${product.id}'">
+                            <c:if test="${not empty product.image}">
+                                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}"/>
+                            </c:if>
+                            <h3>${product.name}</h3>
+                            <p>Category: ${product.category}</p>
+                            <p>Price: $${product.price}</p>
+                            <div class="actions">
+                                <a href="${pageContext.request.contextPath}/cart/add/${product.id}">Add to Cart</a>
+                                <a href="${pageContext.request.contextPath}/cart/buynow/${product.id}">Buy Now</a>
+                                <c:if test="${user.role=='ROLE_ADMIN'}">
+                                    <a href="${pageContext.request.contextPath}/admin/update/${product.id}" class="admin">Update</a>
+                                    <a href="${pageContext.request.contextPath}/admin/delete/${product.id}" onclick="return confirm('Are you sure?')" class="admin">Delete</a>
+                                </c:if>
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
-        </div>
-    </c:when>
-    <c:otherwise>
-        <p style="text-align:center;">No products available.</p>
-    </c:otherwise>
-</c:choose>
+            </c:when>
+            <c:otherwise>
+                <p>No products available.</p>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    &copy; 2026 Techouts E-Commerce. All rights reserved.
+    <br/>
+</footer>
 
 </body>
 </html>

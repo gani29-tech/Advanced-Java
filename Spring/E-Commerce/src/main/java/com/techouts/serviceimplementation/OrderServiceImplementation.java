@@ -19,12 +19,6 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
-    public void saveOrder(Order order) {
-        orderRepo.save(order);
-    }
-
-    @Override
     public Order getOrderById(long id) {
         return orderRepo.getOrderById(id);
     }
@@ -32,5 +26,14 @@ public class OrderServiceImplementation implements OrderService {
     @Override
     public List<Order> getOrdersByUser(User user) {
         return orderRepo.getOrdersByUser(user);
+    }
+
+    @Override
+    @Transactional
+    public boolean cancelOrder(long orderId) {
+        Order order = orderRepo.getOrderById(orderId);
+        if (order != null) order.setStatus("CANCELLED");
+        orderRepo.save(order);
+        return true;
     }
 }
