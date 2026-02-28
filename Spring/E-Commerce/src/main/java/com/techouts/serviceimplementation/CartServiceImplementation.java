@@ -44,12 +44,12 @@ public class CartServiceImplementation implements CartService {
                 break;
             }
         }
-        if(!productExists){
-             CartItem item = new CartItem();
-             item.setProduct(product);
-             item.setQuantity(1);
-             item.setCart(cart);
-             cart.getCartItems().add(item);
+        if (!productExists) {
+            CartItem item = new CartItem();
+            item.setProduct(product);
+            item.setQuantity(1);
+            item.setCart(cart);
+            cart.getCartItems().add(item);
             cartRepo.save(cart);
         }
     }
@@ -88,11 +88,11 @@ public class CartServiceImplementation implements CartService {
         order.setPincode(request.getPincode());
         order.setPaymentType(request.getPaymentType());
         order.setStatus("PLACED");
-        for(CartItem item : cart.getCartItems()){
+        for (CartItem item : cart.getCartItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(item.getProduct());
             orderItem.setQuantity(item.getQuantity());
-            orderItem.setPrice(item.getProduct().getPrice()*item.getQuantity());
+            orderItem.setPrice(item.getProduct().getPrice() * item.getQuantity());
             order.getOrderItems().add(orderItem);
             orderItem.setOrder(order);
         }
@@ -104,8 +104,25 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public CartItem getCartItemByProductId(long productId) {
-       return cartRepo.getCartItemByProductId(productId);
+    @Transactional
+    public void buyNow(User user, Product product, CheckoutRequest request) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProduct(product);
+        orderItem.setQuantity(1);
+        orderItem.setPrice(product.getPrice());
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setCity(request.getCity());
+        order.setAddress(request.getAddress());
+        order.setState(request.getState());
+        order.setPincode(request.getPincode());
+        order.setPaymentType(request.getPaymentType());
+        order.setStatus("PLACED");
+        order.getOrderItems().add(orderItem);
+        order.setTotalAmount(product.getPrice());
+        orderItem.setOrder(order);
+        orderRepo.save(order);
     }
 
     private CartItem getCartItemById(long id) {

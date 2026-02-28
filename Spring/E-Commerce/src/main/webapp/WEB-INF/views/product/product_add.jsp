@@ -5,10 +5,9 @@
 <html>
 <head>
     <title>Add Product - E-Commerce</title>
-
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(to right, #4e73df, #1cc88a);
             display: flex;
             justify-content: center;
@@ -17,133 +16,112 @@
             margin: 0;
             padding: 20px;
         }
-
         .container {
             background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 35px 40px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.08);
             width: 450px;
-        }
-
-        h2 {
             text-align: center;
-            margin-bottom: 20px;
+        }
+        h2 {
+            margin-bottom: 25px;
             color: #333;
         }
-
         label {
-            font-weight: bold;
+            font-weight: 600;
             display: block;
-            margin-top: 12px;
+            margin-top: 15px;
+            text-align: left;
         }
-
         input[type="text"],
         input[type="number"],
         textarea,
         input[type="file"] {
             width: 100%;
-            padding: 8px 10px;
+            padding: 10px 12px;
             margin-top: 5px;
-            border-radius: 5px;
+            border-radius: 6px;
             border: 1px solid #ccc;
             font-size: 14px;
         }
-
+        textarea {
+            resize: none;
+        }
         input:focus, textarea:focus {
             border-color: #4e73df;
             outline: none;
         }
-
-        textarea {
-            resize: none;
-        }
-
-        /* Field validation errors */
         .field-error {
             color: #d9534f;
             font-size: 13px;
-            margin-bottom: 8px;
+            margin-top: 5px;
+            text-align: left;
         }
-
-        /* Global validation errors */
         .global-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
+            background-color: #fdecea;
+            color: #c0392b;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
-
-        /* Service exception error */
         .custom-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
+            background-color: #fdecea;
+            color: #c0392b;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
-
-        /* Success message */
         .success {
             background-color: #d4edda;
             color: #155724;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
-
         button {
             width: 100%;
-            padding: 10px;
-            margin-top: 15px;
+            padding: 12px;
+            margin-top: 20px;
             background-color: #1cc88a;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
         }
-
         button:hover {
             background-color: #17a673;
         }
-
         .back-link {
-            text-align: center;
-            margin-top: 15px;
+            margin-top: 18px;
         }
-
         .back-link a {
             text-decoration: none;
             color: #4e73df;
-            font-weight: bold;
+            font-weight: 600;
         }
-
         .back-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
-
 <body>
 
 <div class="container">
     <h2>Add New Product</h2>
 
-    <!-- Global Validation Errors -->
     <form:errors path="*" cssClass="global-error"/>
 
-    <!-- Service Exception Error -->
     <c:if test="${not empty error}">
         <div class="custom-error">${error}</div>
     </c:if>
 
-    <!-- Success Message -->
     <c:if test="${not empty success}">
         <div class="success">${success}</div>
     </c:if>
@@ -176,7 +154,7 @@
     </form:form>
 
     <div class="back-link">
-        <p><a href="${pageContext.request.contextPath}/product/list">Back to List</a></p>
+        <p><a href="${pageContext.request.contextPath}/product/list">Back to Product List</a></p>
     </div>
 </div>
 

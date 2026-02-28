@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface OrderRepo {
     void save(Order order);
+
     Order getOrderById(long id);
+
     List<Order> getOrdersByUser(User user);
 }

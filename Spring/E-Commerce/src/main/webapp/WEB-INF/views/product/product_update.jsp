@@ -4,7 +4,6 @@
 <html>
 <head>
     <title>Update Product - E-Commerce</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +15,6 @@
             margin: 0;
             padding: 20px;
         }
-
         .container {
             background: #ffffff;
             padding: 30px 40px;
@@ -24,130 +22,43 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             width: 450px;
         }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        label { font-weight: bold; display: block; margin-top: 12px; }
+        input[type="text"], input[type="number"], textarea, input[type="file"] {
+            width: 100%; padding: 8px 10px; margin-top: 5px;
+            border-radius: 5px; border: 1px solid #ccc; font-size: 14px;
         }
+        input:focus, textarea:focus { border-color: #4e73df; outline: none; }
+        textarea { resize: none; }
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 12px;
+        .field-error { color: #d9534f; font-size: 13px; margin-bottom: 8px; }
+        .global-error, .custom-error, .success {
+            padding: 8px; border-radius: 5px; margin-bottom: 10px; text-align: center;
         }
-
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        input[type="file"] {
-            width: 100%;
-            padding: 8px 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #4e73df;
-            outline: none;
-        }
-
-        textarea {
-            resize: none;
-        }
-
-        .field-error {
-            color: #d9534f;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .global-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .custom-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+        .global-error, .custom-error { background-color: #f8d7da; color: #721c24; }
+        .success { background-color: #d4edda; color: #155724; }
 
         button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 15px;
-            background-color: #1cc88a;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
+            width: 100%; padding: 10px; margin-top: 15px;
+            background-color: #1cc88a; color: white; border: none; border-radius: 5px;
+            font-size: 16px; cursor: pointer; transition: 0.3s;
         }
+        button:hover { background-color: #17a673; }
 
-        button:hover {
-            background-color: #17a673;
-        }
+        img { margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
 
-        img {
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .back-link a {
-            text-decoration: none;
-            color: #4e73df;
-            font-weight: bold;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { text-decoration: none; color: #4e73df; font-weight: bold; }
+        .back-link a:hover { text-decoration: underline; }
     </style>
 </head>
-
 <body>
-
 <div class="container">
     <h2>Update Product</h2>
 
-    <!-- Global Validation Errors -->
     <form:errors path="*" cssClass="global-error"/>
-
-    <!-- Service Exception Error -->
-    <c:if test="${not empty error}">
-        <div class="custom-error">${error}</div>
-    </c:if>
-
-    <!-- Success Message -->
-    <c:if test="${not empty success}">
-        <div class="success">${success}</div>
-    </c:if>
+    <c:if test="${not empty error}"><div class="custom-error">${error}</div></c:if>
+    <c:if test="${not empty success}"><div class="success">${success}</div></c:if>
 
     <form:form method="POST"
                action="${pageContext.request.contextPath}/admin/update"
@@ -187,6 +98,5 @@
         <p><a href="${pageContext.request.contextPath}/product/list">Back to List</a></p>
     </div>
 </div>
-
 </body>
 </html>

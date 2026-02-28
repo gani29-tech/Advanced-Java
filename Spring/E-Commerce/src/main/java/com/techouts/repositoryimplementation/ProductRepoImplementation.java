@@ -1,9 +1,6 @@
 package com.techouts.repositoryimplementation;
 
-import com.techouts.entity.Cart;
-import com.techouts.entity.Order;
 import com.techouts.entity.Product;
-import com.techouts.entity.User;
 import com.techouts.repository.ProductRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,14 +17,13 @@ public class ProductRepoImplementation implements ProductRepo {
     private EntityManager em;
 
     @Override
-    public Product addProduct(Product product) {
+    public void addProduct(Product product) {
         em.persist(product);
-        return product;
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        return em.merge(product);
+    public void updateProduct(Product product) {
+        em.merge(product);
     }
 
     @Override
@@ -55,8 +51,9 @@ public class ProductRepoImplementation implements ProductRepo {
     public List<String> getAllCategories() {
         return em.createQuery("SELECT c.category FROM Product c", String.class).getResultList();
     }
+
     @Override
-    public boolean productExists(String name,long id) {
+    public boolean productExists(String name, long id) {
         List<Product> product = em.createQuery("from Product where name = :name and id<>:id", Product.class)
                 .setParameter("name", name)
                 .setParameter("id", id)

@@ -3,8 +3,8 @@ package com.techouts.controller;
 import com.techouts.entity.Product;
 import com.techouts.entity.User;
 import com.techouts.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,20 +24,25 @@ public class ProductController {
     }
 
     @GetMapping("/product/list")
-    public String listProducts(
-            @RequestParam(name = "category", defaultValue = "All") String category,
-            Model model,
-            @AuthenticationPrincipal User user) {
+    public String home(HttpSession session, Model model,
+                       @RequestParam(name = "category", defaultValue = "All") String category) {
+        User user = (User) session.getAttribute("user");
         List<Product> products;
         if (category.equalsIgnoreCase("All"))
             products = productService.getAllProducts();
         else
             products = productService.getProductsByCategory(category);
-        model.addAttribute("products", products);
+        session.setAttribute("user", user);
         model.addAttribute("user", user);
-        model.addAttribute("categories", productService.getAllCategories().stream().distinct().toList());
+        model.addAttribute("categories", productService.getAllCategories().stream().distinct().sorted().toList());
+        model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
-        return "product/product_list";
+        Object message = session.getAttribute("message");
+        if (message != null) {
+            model.addAttribute("message", message.toString());
+            session.removeAttribute("message");
+        }
+        return "home";
     }
 
     @GetMapping("/product/details/{id}")

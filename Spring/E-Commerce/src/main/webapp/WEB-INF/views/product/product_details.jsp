@@ -1,201 +1,173 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Product Details - Techouts Ecommerce</title>
-
+    <title>${product.name}</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
         body {
-            background: linear-gradient(to right, #e3f2fd, #fce4ec);
-            padding: 30px;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #ffffff);
+            margin: 0;
+            padding: 40px;
+            color: #333;
         }
-
-        /* Header */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .brand {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .home-btn {
-            background: #2c3e50;
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-
-        .home-btn:hover {
-            background: #1a252f;
-        }
-
-        /* Main Card */
         .product-container {
             max-width: 1000px;
             margin: auto;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background: #fff;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
             display: flex;
             gap: 40px;
+            align-items: flex-start;
+            animation: fadeIn 0.9s ease-in-out;
         }
-
-        /* Product Image */
         .product-image {
             flex: 1;
             text-align: center;
         }
-
         .product-image img {
-            max-width: 100%;
-            height: 350px;
-            object-fit: contain;
-        }
-
-        /* Product Info */
-        .product-info {
-            flex: 1;
-        }
-
-        .product-info h2 {
-            font-size: 28px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
             margin-bottom: 15px;
-            color: #2c3e50;
         }
-
-        .product-info p {
-            margin-bottom: 12px;
-            font-size: 16px;
-            color: #555;
+        .product-image img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-
+        .product-image .meta {
+            font-size: 1.1rem;
+            color: #444;
+        }
+        .product-image .meta strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-top: 5px;
+            color: #222;
+        }
+        .product-details {
+            flex: 1.2;
+        }
+        .message, .error {
+            padding: 14px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .message {
+            background: #e6ffed;
+            color: #1b7a3d;
+            border: 1px solid #b2f5ea;
+        }
+        .error {
+            background: #ffe6e6;
+            color: #a12d2d;
+            border: 1px solid #f5b2b2;
+        }
+        p {
+            margin: 12px 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
         .price {
-            font-size: 24px;
+            font-size: 1.6rem;
             font-weight: bold;
-            color: #27ae60;
-            margin: 15px 0;
-        }
-
-        /* Buttons */
-        .buttons {
+            color: #007bff;
             margin-top: 20px;
         }
-
-        .btn {
+        .actions {
+            margin-top: 25px;
+        }
+        .actions a {
             display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 6px;
+            margin: 10px 12px 0 0;
+            padding: 14px 24px;
             text-decoration: none;
+            border-radius: 10px;
             font-weight: 600;
-            transition: 0.3s;
+            font-size: 1.05rem;
+            transition: all 0.35s ease;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
         }
-
-        .btn-cart {
-            background-color: #2980b9;
-            color: white;
+        .actions a.add {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
         }
-
-        .btn-cart:hover {
-            background-color: #1f6692;
+        .actions a.add:hover {
+            background: linear-gradient(135deg, #0056b3, #003d80);
+            transform: translateY(-3px);
         }
-
-        .btn-buy {
-            background-color: #27ae60;
-            color: white;
+        .actions a.buy {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: #fff;
         }
-
-        .btn-buy:hover {
-            background-color: #1e8449;
+        .actions a.buy:hover {
+            background: linear-gradient(135deg, #1e7e34, #145523);
+            transform: translateY(-3px);
         }
-
-        .btn-back {
-            background-color: #7f8c8d;
-            color: white;
-            margin-top: 20px;
+        .actions a.back {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: #fff;
         }
-
-        .btn-back:hover {
-            background-color: #5f6a6a;
+        .actions a.back:hover {
+            background: linear-gradient(135deg, #5a6268, #444b50);
+            transform: translateY(-3px);
         }
-
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(25px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
         /* Responsive */
         @media (max-width: 768px) {
             .product-container {
                 flex-direction: column;
-                text-align: center;
+                padding: 25px;
             }
-
-            .product-image img {
-                height: 250px;
+            .product-image, .product-details {
+                flex: unset;
+                width: 100%;
+            }
+            .actions a {
+                display: block;
+                margin: 14px auto;
+                width: 85%;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="top-bar">
-    <div class="brand">Techouts Ecommerce</div>
-    <a href="${pageContext.request.contextPath}/home" class="home-btn">Home</a>
-</div>
-
-<div class="product-container">
-
-    <!-- Product Image -->
-    <div class="product-image">
-        <c:if test="${not empty product.image}">
-            <img src="${pageContext.request.contextPath}/uploads/${product.image}"
-                 alt="${product.name}" />
-        </c:if>
-    </div>
-
-    <!-- Product Information -->
-    <div class="product-info">
-        <h2>${product.name}</h2>
-
-        <p><strong>Category:</strong> ${product.category}</p>
-        <p><strong>Description:</strong> ${product.description}</p>
-
-        <div class="price">$${product.price}</div>
-
-        <div class="buttons">
-            <!-- Add to Cart -->
-            <a href="${pageContext.request.contextPath}/cart/add/${product.id}"
-               class="btn btn-cart">
-               Add to Cart
-            </a>
-
-            <!-- Buy Now -->
-            <a href="${pageContext.request.contextPath}/cart/buynow/${product.id}"
-               class="btn btn-buy">
-               Buy Now
-            </a>
+    <div class="product-container">
+        <div class="product-image">
+            <c:if test="${not empty product.image}">
+                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}" />
+            </c:if>
+            <div class="meta">
+                <span><strong>${product.name}</strong></span>
+                <span>Category: ${product.category}</span>
+            </div>
         </div>
+        <div class="product-details">
+            <c:if test="${not empty message}">
+                <div class="message">${message}</div>
+            </c:if>
+            <c:if test="${not empty error}">
+                <div class="error">${error}</div>
+            </c:if>
 
-        <br>
-        <a href="${pageContext.request.contextPath}/product/list"
-           class="btn btn-back">
-           Back to Products
-        </a>
+            <p><strong>About the Product:</strong> ${product.description}</p>
+            <p class="price">Price: $${product.price}</p>
+
+            <div class="actions">
+                <a href="${pageContext.request.contextPath}/cart/add/details/${product.id}" class="add">Add to Cart</a>
+                <a href="${pageContext.request.contextPath}/cart/buynow/${product.id}" class="buy">Buy Now</a>
+                <a href="${pageContext.request.contextPath}/product/list" class="back">Back to Products</a>
+                <a href="${pageContext.request.contextPath}/cart/show" class="add">Go to cart</a>
+            </div>
+        </div>
     </div>
-
-</div>
-
 </body>
 </html>

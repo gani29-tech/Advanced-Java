@@ -15,9 +15,9 @@
             max-width: 1100px;
             margin: auto;
             background: #ffffff;
-            padding: 35px;
+            padding: 30px;
             border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
 
         .top-bar {
@@ -33,7 +33,7 @@
         }
 
         .home-btn {
-            background: linear-gradient(to right, #2c3e50, #1a252f);
+            background: #2c3e50;
             color: white;
             padding: 8px 16px;
             text-decoration: none;
@@ -42,18 +42,18 @@
         }
 
         .home-btn:hover {
-            opacity: 0.9;
+            background: #1a252f;
         }
 
         h2 {
-            margin-top: 25px;
+            margin-top: 20px;
             color: #34495e;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 25px;
+            margin-top: 20px;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -64,12 +64,19 @@
         }
 
         th {
-            background: linear-gradient(to right, #2c3e50, #34495e);
+            background: #2c3e50;
             color: white;
         }
 
         tr:nth-child(even) {
             background: #f4f6f8;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
         .section {
@@ -117,7 +124,7 @@
         .btn-confirm {
             background: linear-gradient(to right, #27ae60, #2ecc71);
             color: white;
-            padding: 12px 30px;
+            padding: 12px 28px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -127,7 +134,7 @@
         }
 
         .btn-confirm:hover {
-            opacity: 0.9;
+            background: linear-gradient(to right, #1e8449, #239b56);
         }
 
         .empty-cart {
@@ -180,41 +187,34 @@
         </div>
     </c:if>
 
-    <c:if test="${not empty cart.cartItems}">
+    <c:if test="${not empty orderItem}">
 
         <table>
             <tr>
-                <th>Product</th>
                 <th>Image</th>
-                <th>Quantity</th>
+                <th>Product</th>
                 <th>Price</th>
-                <th>Total</th>
             </tr>
 
-            <c:set var="total" value="0" />
-            <c:forEach var="item" items="${cart.cartItems}">
-                <tr>
-                    <td>${item.product.name}</td>
-                    <td>
-                        <c:if test="${not empty item.product.image}">
-                            <img src="${pageContext.request.contextPath}/uploads/${item.product.image}"
-                                 alt="${item.product.name}"
-                                 style="width: 80px; height: 80px; object-fit: contain; border-radius: 8px;"/>
-                        </c:if>
-                    </td>
-                    <td>${item.quantity}</td>
-                    <td>$${item.product.price}</td>
-                    <td>$${item.quantity * item.product.price}</td>
-                </tr>
-                <c:set var="total" value="${total + (item.quantity * item.product.price)}" />
-            </c:forEach>
+            <tr>
+                <td>
+                    <c:if test="${not empty orderItem.image}">
+                        <img src="${pageContext.request.contextPath}/uploads/${orderItem.image}"
+                             alt="${orderItem.name}"/>
+                    </c:if>
+                </td>
+                <td>${orderItem.name}</td>
+                <td>$${orderItem.price}</td>
+            </tr>
         </table>
 
         <div class="total-box">
-            Total Amount: $${total}
+            Total Amount: $${orderItem.price}
         </div>
 
-        <form action="${pageContext.request.contextPath}/cart/checkout" method="post">
+        <form action="${pageContext.request.contextPath}/cart/buynow" method="post">
+
+            <input type="hidden" name="productId" value="${orderItem.id}" />
 
             <div class="section">
                 <h3>Shipping Address</h3>
@@ -259,9 +259,9 @@
 
     </c:if>
 
-    <c:if test="${empty cart.cartItems}">
+    <c:if test="${empty orderItem}">
         <div class="empty-cart">
-            Your cart is empty. Please add products before checking out.
+            No item selected for checkout.
         </div>
     </c:if>
 

@@ -14,9 +14,9 @@
 
         .container {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             max-width: 1100px;
             margin: auto;
         }
@@ -29,96 +29,116 @@
 
         .brand {
             font-size: 22px;
-            font-weight: bold;
+            font-weight: 700;
             color: #2c3e50;
         }
 
         .home-btn {
-            background: #2c3e50;
+            background: linear-gradient(to right, #2c3e50, #1a252f);
             color: white;
-            padding: 8px 15px;
+            padding: 8px 16px;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: 0.3s;
         }
 
         .home-btn:hover {
-            background: #1a252f;
+            opacity: 0.9;
         }
 
         h2 {
-            margin-top: 20px;
+            margin-top: 25px;
             color: #34495e;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th, td {
-            padding: 12px;
+            padding: 14px;
             text-align: center;
             vertical-align: middle;
-            word-break: keep-all; /* Prevent breaking words */
+            word-break: keep-all;
         }
 
         th {
-            background: #2c3e50;
+            background: linear-gradient(to right, #2c3e50, #34495e);
             color: white;
         }
 
         tr:nth-child(even) {
-            background: #f2f2f2;
+            background: #f4f6f8;
         }
 
         .btn-view, .btn-cancel {
-            padding: 6px 15px; /* More horizontal padding */
-            border-radius: 5px;
+            padding: 7px 16px;
+            border-radius: 8px;
             text-decoration: none;
             transition: 0.3s;
             display: inline-block;
-            white-space: nowrap; /* Prevent wrapping */
+            white-space: nowrap;
             font-weight: 600;
             font-size: 14px;
-            line-height: 1.2;
             cursor: pointer;
         }
 
         .btn-view {
-            background: #2980b9;
+            background: linear-gradient(to right, #2980b9, #3498db);
             color: white;
         }
 
         .btn-view:hover {
-            background: #1f6692;
+            opacity: 0.9;
         }
 
         .btn-cancel {
-            background: #c0392b;
+            background: linear-gradient(to right, #c0392b, #e74c3c);
             color: white;
         }
 
         .btn-cancel:hover {
-            background: #7f1c18;
+            opacity: 0.9;
         }
 
         .status-placed {
-            color: green;
-            font-weight: bold;
+            color: #27ae60;
+            font-weight: 700;
         }
 
         .status-cancelled {
-            color: red;
-            font-weight: bold;
+            color: #c0392b;
+            font-weight: 700;
         }
 
         .no-orders {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
             font-size: 18px;
             color: #555;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #eafaf1;
+            color: #1e8449;
+            border: 1px solid #2ecc71;
+        }
+
+        .alert-error {
+            background-color: #fdecea;
+            color: #c0392b;
+            border: 1px solid #e74c3c;
         }
     </style>
 </head>
@@ -131,6 +151,18 @@
     </div>
 
     <h2>My Orders</h2>
+
+    <c:if test="${not empty message}">
+        <div class="alert alert-success">
+            ${message}
+        </div>
+    </c:if>
+
+    <c:if test="${not empty error}">
+        <div class="alert alert-error">
+            ${error}
+        </div>
+    </c:if>
 
     <c:choose>
         <c:when test="${not empty orders}">
@@ -172,7 +204,9 @@
                         </td>
                         <td>
                             <c:if test="${fn:toUpperCase(fn:trim(order.status)) == 'PLACED'}">
-                                <a href="${pageContext.request.contextPath}/order/cancel/${order.id}" class="btn-cancel">Cancel Order</a>
+                                <a href="${pageContext.request.contextPath}/order/cancel/${order.id}" class="btn-cancel">
+                                    Cancel Order
+                                </a>
                             </c:if>
                         </td>
                     </tr>
@@ -183,6 +217,7 @@
             <div class="no-orders">You have no orders yet.</div>
         </c:otherwise>
     </c:choose>
+
 </div>
 
 </body>

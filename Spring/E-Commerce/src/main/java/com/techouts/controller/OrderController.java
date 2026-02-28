@@ -33,18 +33,31 @@ public class OrderController {
         model.addAttribute("order", order);
         return "order/order_details";
     }
+
     @GetMapping("/cancel/{orderId}")
-    public String cancelOrder(@PathVariable("orderId") long orderId, Model model,HttpSession session) {
-        if(orderService.cancelOrder(orderId)){
-            model.addAttribute("message", "Order has been cancelled");
-        }
-        else {
+    public String cancelOrder(@PathVariable("orderId") long orderId, Model model, HttpSession session) {
+        if (orderService.cancelOrder(orderId)) {
+            model.addAttribute("error", "Order has been cancelled");
+        } else {
             model.addAttribute("message", "Order not cancelled");
         }
         List<Order> orders = orderService.getOrdersByUser((User) session.getAttribute("user"));
         model.addAttribute("orders", orders);
         return "order/order_list";
     }
+
+    @GetMapping("/cancel/details/{orderId}")
+    public String cancelOrderView(@PathVariable("orderId") long orderId, Model model, HttpSession session) {
+        if (orderService.cancelOrder(orderId)) {
+            model.addAttribute("error", "Order has been cancelled");
+        } else {
+            model.addAttribute("message", "Order not cancelled");
+        }
+        Order order = orderService.getOrderById(orderId);
+        model.addAttribute("order", order);
+        return "order/order_details";
+    }
+
     @GetMapping("/success")
     public String orderSuccess() {
         return "order/order_success";

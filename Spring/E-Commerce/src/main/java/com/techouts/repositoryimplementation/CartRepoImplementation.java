@@ -37,7 +37,7 @@ public class CartRepoImplementation implements CartRepo {
 
     @Override
     public CartItem getCartItemByProductId(long productId) {
-        List<CartItem> cartItems = em.createQuery("from CartItem where product.id =:productId",CartItem.class)
+        List<CartItem> cartItems = em.createQuery("from CartItem where product.id =:productId", CartItem.class)
                 .setParameter("productId", productId).getResultList();
         return !cartItems.isEmpty() ? cartItems.get(0) : null;
     }

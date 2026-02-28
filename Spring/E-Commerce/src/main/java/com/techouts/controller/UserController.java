@@ -4,13 +4,8 @@ import com.techouts.entity.Product;
 import com.techouts.entity.User;
 import com.techouts.service.ProductService;
 import com.techouts.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
     private final ProductService productService;
+
     public UserController(UserService userService, ProductService productService) {
         this.userService = userService;
         this.productService = productService;
@@ -34,12 +30,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute User user,Model model) {
-        try{
+    public String signup(@ModelAttribute User user, Model model) {
+        try {
             userService.saveUser(user);
             return "redirect:/login";
-        }catch (IllegalArgumentException e){
-            model.addAttribute("error",e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
             return "signup";
         }
     }
@@ -54,7 +50,7 @@ public class UserController {
                        @RequestParam(name = "category", defaultValue = "All") String category) {
         User user = userService.getUserById(u.getId());
         List<Product> products;
-        if(category.equalsIgnoreCase("All"))
+        if (category.equalsIgnoreCase("All"))
             products = productService.getAllProducts();
         else
             products = productService.getProductsByCategory(category);
@@ -63,27 +59,35 @@ public class UserController {
         model.addAttribute("categories", productService.getAllCategories().stream().distinct().sorted().toList());
         model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
+        Object message = session.getAttribute("message");
+        if (message != null) {
+            model.addAttribute("message", message.toString());
+            session.removeAttribute("message");
+        }
         return "home";
     }
+
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("products", productService.getAllProducts());
         return "index";
     }
+
     @GetMapping("/user/update")
-    public String updateUserForm(Model model, @AuthenticationPrincipal User user) {
+    public String updateUserForm(Model model, @AuthenticationPrincipal User u) {
+        User user = userService.getUserById(u.getId());
         model.addAttribute("user", user);
         return "user_update";
     }
 
     @PostMapping("/user/update")
-    public String updateUser(@ModelAttribute User user,Model model) {
+    public String updateUser(@ModelAttribute User user, Model model, HttpSession session) {
         try {
             userService.updateUser(user);
+            session.setAttribute("message", "User updated successfully");
             return "redirect:/home";
-        }
-        catch (IllegalArgumentException e){
-            model.addAttribute("error",e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
             return "user_update";
         }
     }

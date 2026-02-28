@@ -1,8 +1,6 @@
 package com.techouts.serviceimplementation;
 
-import com.techouts.entity.CartItem;
 import com.techouts.entity.Product;
-import com.techouts.entity.User;
 import com.techouts.repository.ProductRepo;
 import com.techouts.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,7 @@ import java.util.List;
 public class ProductServiceImplementation implements ProductService {
 
     private final ProductRepo productRepo;
-    private final String uploadDir ="C:/Users/tech/IdeaProjects/Advanced-Java/Spring/E-Commerce/uploads";
+    private final String uploadDir = "C:/Users/tech/IdeaProjects/Advanced-Java/Spring/E-Commerce/uploads";
 
     @Autowired
     public ProductServiceImplementation(ProductRepo productRepo) {
@@ -25,24 +23,24 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product, MultipartFile imageFile) {
-        try{
+    public void addProduct(Product product, MultipartFile imageFile) {
+        try {
             if (!imageFile.isEmpty()) {
                 String filename = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 saveFile(imageFile, filename);
                 product.setImage(filename);
             }
-        }catch (IOException e){
-            throw new RuntimeException("Failed to add product image",e);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to add product image", e);
         }
-        if(productRepo.productExists(product.getName(),product.getId())){
+        if (productRepo.productExists(product.getName(), product.getId())) {
             throw new IllegalArgumentException("Product already exists");
         }
-        return productRepo.addProduct(product);
+        productRepo.addProduct(product);
     }
 
     @Override
-    public Product updateProduct(Product product, MultipartFile imageFile) {
+    public void updateProduct(Product product, MultipartFile imageFile) {
         try {
             if (!imageFile.isEmpty()) {
                 Product existing = getProductById(product.getId());
@@ -61,10 +59,10 @@ public class ProductServiceImplementation implements ProductService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to update product image", e);
         }
-        if(productRepo.productExists(product.getName(),product.getId())){
+        if (productRepo.productExists(product.getName(), product.getId())) {
             throw new IllegalArgumentException("Product already exists");
         }
-        return productRepo.updateProduct(product);
+        productRepo.updateProduct(product);
     }
 
     @Override

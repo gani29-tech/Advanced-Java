@@ -1,11 +1,9 @@
 package com.techouts.serviceimplementation;
 
 import com.techouts.entity.Cart;
-import com.techouts.entity.Order;
 import com.techouts.entity.User;
 import com.techouts.repository.UserRepo;
 import com.techouts.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,10 +16,12 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+
     public UserServiceImplementation(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
+
     @Override
     public User getUserById(Long id) {
         return userRepo.findById(id);
@@ -29,11 +29,11 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
     @Override
     @Transactional
-    public void saveUser(User user){
-        if(userRepo.findByUsername(user.getUsername())!=null){
+    public void saveUser(User user) {
+        if (userRepo.findByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
-        if(userRepo.findByEmail(user.getEmail())!=null){
+        if (userRepo.findByEmail(user.getEmail()) != null) {
             throw new IllegalArgumentException("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -46,29 +46,23 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
     @Override
     @Transactional
     public void updateUser(User user) {
-        if(userRepo.emailExists(user.getEmail(),user.getId())){
+        User existingUser = userRepo.findById(user.getId());
+        if (userRepo.emailExists(user.getEmail(), user.getId())) {
             throw new IllegalArgumentException("Email already exists");
         }
-        if(userRepo.usernameExists(user.getUsername(),user.getId())){
+        if (userRepo.usernameExists(user.getUsername(), user.getId())) {
             throw new IllegalArgumentException("Username already exists");
         }
-        userRepo.save(user);
-    }
-
-    @Override
-    public User getUserByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        return userRepo.findByEmail(email);
+        existingUser.setEmail(user.getEmail());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setAddress(user.getAddress());
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return user;

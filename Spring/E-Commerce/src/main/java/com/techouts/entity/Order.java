@@ -19,7 +19,7 @@ public class Order {
     private long id;
     @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
     private LocalDateTime orderDate;
     private double totalAmount;

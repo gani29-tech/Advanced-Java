@@ -23,11 +23,7 @@ public class UserRepoImplementation implements UserRepo {
     @Override
     @Transactional
     public void save(User user) {
-        if (user.getId()==0) {
-            em.persist(user);
-        } else {
-            em.merge(user);
-        }
+        em.persist(user);
     }
 
     @Override
@@ -42,30 +38,30 @@ public class UserRepoImplementation implements UserRepo {
     }
 
     @Override
-    public boolean emailExists(String email,long id) {
+    public boolean emailExists(String email, long id) {
         List<User> users = em.createQuery("From User u where email=:email and id<>:id", User.class)
-                .setParameter("email",email)
-                .setParameter("id",id)
+                .setParameter("email", email)
+                .setParameter("id", id)
                 .getResultList();
         return !users.isEmpty();
     }
 
     @Override
-    public boolean usernameExists(String username,long id) {
-        List<User> users = em.createQuery("From User u where username=:username and id<>:id",User.class)
-                .setParameter("username",username)
-                .setParameter("id",id)
+    public boolean usernameExists(String username, long id) {
+        List<User> users = em.createQuery("From User u where username=:username and id<>:id", User.class)
+                .setParameter("username", username)
+                .setParameter("id", id)
                 .getResultList();
         return !users.isEmpty();
     }
 
     @Override
     public User findByEmail(String email) {
-        try{
-            return em.createQuery("Select u from User u Where u.email=:email",User.class)
-                    .setParameter("email",email)
+        try {
+            return em.createQuery("Select u from User u Where u.email=:email", User.class)
+                    .setParameter("email", email)
                     .getSingleResult();
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }

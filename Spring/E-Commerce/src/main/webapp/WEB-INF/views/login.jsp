@@ -1,10 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Login - E-Commerce</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,17 +22,9 @@
             width: 350px;
         }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
 
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
+        label { font-weight: bold; margin-top: 10px; display: block; }
 
         input {
             width: 100%;
@@ -46,10 +36,7 @@
             font-size: 14px;
         }
 
-        input:focus {
-            border-color: #4e73df;
-            outline: none;
-        }
+        input:focus { border-color: #4e73df; outline: none; }
 
         button {
             width: 100%;
@@ -63,9 +50,7 @@
             transition: 0.3s;
         }
 
-        button:hover {
-            background-color: #2e59d9;
-        }
+        button:hover { background-color: #2e59d9; }
 
         .message {
             padding: 10px;
@@ -73,35 +58,19 @@
             border-radius: 5px;
             font-size: 14px;
             text-align: center;
+            animation: fadeOut 5s forwards;
         }
 
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .success { background-color: #d4edda; color: #155724; }
 
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
+        @keyframes fadeOut { 0% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; display: none; } }
 
-        .signup-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .signup-link a {
-            text-decoration: none;
-            color: #4e73df;
-            font-weight: bold;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
+        .signup-link { text-align: center; margin-top: 15px; }
+        .signup-link a { text-decoration: none; color: #4e73df; font-weight: bold; }
+        .signup-link a:hover { text-decoration: underline; }
     </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -117,7 +86,7 @@
 
     <form action="${pageContext.request.contextPath}/login" method="post">
         <label>Username:</label>
-        <input type="text" name="username" required />
+        <input type="text" name="username" required autofocus />
 
         <label>Password:</label>
         <input type="password" name="password" required />

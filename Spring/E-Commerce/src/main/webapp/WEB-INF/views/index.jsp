@@ -5,37 +5,21 @@
 <head>
     <title>Techouts E-Commerce</title>
     <style>
-        /* Reset & base */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: linear-gradient(to bottom, #f0f4ff, #d9e6ff); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
 
-        /* Header */
-        header {
-            background-color: #6c7ae0;
-            color: white;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+        header { background-color: #6c7ae0; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-radius: 0 0 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         header .brand { font-size: 26px; font-weight: bold; }
-        header .links a {
-            text-decoration: none;
-            color: white;
-            margin-left: 15px;
-            padding: 8px 15px;
-            border-radius: 6px;
-            background-color: #28a745;
-            font-weight: 600;
-            transition: 0.3s;
-        }
+        header .links a { text-decoration: none; color: white; margin-left: 15px; padding: 8px 15px; border-radius: 6px; background-color: #28a745; font-weight: 600; transition: 0.3s; }
         header .links a:hover { background-color: #19692c; transform: scale(1.05); }
 
-        /* Container */
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; flex: 1; }
-        h2 { text-align: center; margin-bottom: 30px; color: #2c3e50; font-size: 28px; }
+        h2 { text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 28px; }
+
+        /* Flash message */
+        .message { padding: 10px 15px; margin-bottom: 20px; border-radius: 6px; text-align: center; font-weight: 600; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
 
         /* Product Grid */
         .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
@@ -43,48 +27,22 @@
         @media (max-width: 768px) { .products { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 480px) { .products { grid-template-columns: 1fr; } }
 
-        /* Product Card */
-        .product-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+        .product-card { background: #fff; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
         .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
         .product-card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 15px; border-radius: 12px; }
         .product-card h3 { font-size: 20px; color: #2c3e50; margin: 10px 0 8px; }
         .product-card p { font-size: 15px; color: #555; margin: 5px 0; }
 
-        /* Action Buttons */
         .actions { margin-top: 12px; display: flex; justify-content: center; gap: 8px; pointer-events: auto; }
-        .actions a {
-            text-decoration: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: 0.3s;
-            color: white;
-        }
+        .actions a { text-decoration: none; padding: 8px 14px; border-radius: 8px; font-size: 14px; transition: 0.3s; color: white; }
         .actions a[href*="/cart/add"] { background-color: #27ae60; }
         .actions a[href*="/cart/buynow"] { background-color: #e67e22; }
         .actions a[href*="/cart/add"]:hover { background-color: #219150; }
         .actions a[href*="/cart/buynow"]:hover { background-color: #d35400; }
 
-        /* No products */
         .no-products { text-align: center; font-size: 18px; color: #555; margin-top: 50px; }
 
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px 40px;
-            text-align: center;
-            border-radius: 12px 12px 0 0;
-            margin-top: 40px;
-        }
+        footer { background-color: #2c3e50; color: #ecf0f1; padding: 20px 40px; text-align: center; border-radius: 12px 12px 0 0; margin-top: 40px; }
         footer a { color: #6c7ae0; text-decoration: none; margin: 0 10px; }
         footer a:hover { text-decoration: underline; }
     </style>
@@ -110,6 +68,14 @@
 </header>
 
 <div class="container">
+    <!-- Flash message from session -->
+    <c:if test="${not empty message}">
+        <div class="message success">${message}</div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="message error">${error}</div>
+    </c:if>
+
     <h2>Products</h2>
 
     <c:if test="${not empty products}">
