@@ -6,6 +6,10 @@ import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -31,7 +35,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
         dataSource.setPassword("root");
         return dataSource;
     }
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        ClientRegistration github = ClientRegistration.withRegistrationId("github")
+                .clientId("YOUR_GITHUB_CLIENT_ID")            // From GitHub OAuth App
+                .clientSecret("YOUR_GITHUB_CLIENT_SECRET")    // From GitHub OAuth App
+                .scope("read:user", "user:email")             // GitHub scopes
+                .authorizationUri("https://github.com/login/oauth/authorize")
+                .tokenUri("https://github.com/login/oauth/access_token")
+                .userInfoUri("https://api.github.com/user")
+                .userNameAttributeName("id")                  // GitHub unique user ID
+                .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .clientName("GitHub")
+                .build();
 
+        return new InMemoryClientRegistrationRepository(github);
+    }
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

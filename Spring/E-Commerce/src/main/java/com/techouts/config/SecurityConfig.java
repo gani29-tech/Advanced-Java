@@ -33,6 +33,10 @@ public class SecurityConfig {
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
+                .oauth2Login(oauth->oauth
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
